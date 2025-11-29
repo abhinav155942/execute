@@ -1,218 +1,266 @@
+import { useState, useRef, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { MessageCircle, Send, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageSquare, Sparkles, Send, CheckCircle2, Target, FileText, Rocket } from "lucide-react";
-import { useState } from "react";
-import { Button } from "./ui/button";
-
-type Step = "business" | "plan" | "demo" | "integration";
+import { renderMarkdown } from "@/utils/markdownParser";
+import { useToast } from "@/hooks/use-toast";
 
 interface Message {
   role: "user" | "assistant";
-  text: string;
+  content: string;
 }
 
-const steps = [
-  { id: "business", label: "Understand Business", icon: Target, description: "Tell us about your needs" },
-  { id: "plan", label: "Create Plan", icon: FileText, description: "We'll design a solution" },
-  { id: "demo", label: "Build Demo", icon: Sparkles, description: "See it in action" },
-  { id: "integration", label: "Easy Integration", icon: Rocket, description: "Start building instantly" }
-];
-
 const ChatWizard = () => {
-  const [currentStep, setCurrentStep] = useState<Step>("business");
   const [messages, setMessages] = useState<Message[]>([
-    { 
-      role: "assistant", 
-      text: "👋 Welcome! I'm here to understand your business needs and create a custom AI solution for you. Let's start - what kind of business are you building?" 
-    }
+    {
+      role: "assistant",
+      content: "Welcome! How can I help you today? I can answer questions about our AI automation, SaaS development, and design services.",
+    },
   ]);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
 
-  const handleSend = () => {
-    if (!input.trim()) return;
-    
-    const userMessage = input;
-    setMessages([...messages, { role: "user", text: userMessage }]);
-    setInput("");
-    
-    // Simulate AI responses based on current step
-    setTimeout(() => {
-      let response = "";
-      
-      if (currentStep === "business") {
-        response = "Great! I understand you need help with that. Let me ask a few more questions to create the perfect solution. What are your main pain points?";
-        // After a few exchanges, move to next step
-        if (messages.length > 4) {
-          setTimeout(() => {
-            setMessages(prev => [...prev, { 
-              role: "assistant", 
-              text: "Perfect! I have everything I need. Let me create a detailed plan for your AI solution..." 
-            }]);
-            setCurrentStep("plan");
-          }, 2000);
-        }
-      } else if (currentStep === "plan") {
-        response = "Based on what you've told me, here's what I recommend:\n\n✓ AI-powered automation for your workflows\n✓ Custom chatbot for customer support\n✓ Smart analytics dashboard\n\nShall I build a demo for you?";
-        setTimeout(() => {
-          setMessages(prev => [...prev, { 
-            role: "assistant", 
-            text: "Building your custom demo now..." 
-          }]);
-          setCurrentStep("demo");
-        }, 3000);
-      } else if (currentStep === "demo") {
-        response = "🎉 Your demo is ready! Here's what I've built:\n\n• Interactive prototype\n• Full features preview\n• Ready to customize\n\nLike what you see? Click below to start integration!";
-        setTimeout(() => {
-          setCurrentStep("integration");
-        }, 2000);
-      } else {
-        response = "Awesome! Let's get you started. No sales calls, no hassle - just click 'Start Building' and you're ready to go!";
-      }
-      
-      setMessages(prev => [...prev, { role: "assistant", text: response }]);
-    }, 1000);
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const getCurrentStepIndex = () => steps.findIndex(s => s.id === currentStep);
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const streamChat = async (messages: Message[]) => {
+    const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
+
+    const response = await fetch(CHAT_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+      },
+      body: JSON.stringify({ messages }),
+    });
+
+    if (!response.ok) {
+      if (response.status === 429) {
+        throw new Error("Rate limits exceeded, please try again later.");
+      }
+      if (response.status === 402) {
+        throw new Error("Payment required. Please contact support.");
+      }
+      throw new Error("Failed to get response from AI");
+    }
+
+    if (!response.body) {
+      throw new Error("No response body");
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let assistantContent = "";
+
+    // Add initial assistant message
+    setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
+
+    let textBuffer = "";
+    let streamDone = false;
+
+    while (!streamDone) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      textBuffer += decoder.decode(value, { stream: true });
+
+      let newlineIndex: number;
+      while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
+        let line = textBuffer.slice(0, newlineIndex);
+        textBuffer = textBuffer.slice(newlineIndex + 1);
+
+        if (line.endsWith("\r")) line = line.slice(0, -1);
+        if (line.startsWith(":") || line.trim() === "") continue;
+        if (!line.startsWith("data: ")) continue;
+
+        const jsonStr = line.slice(6).trim();
+        if (jsonStr === "[DONE]") {
+          streamDone = true;
+          break;
+        }
+
+        try {
+          const parsed = JSON.parse(jsonStr);
+          const content = parsed.choices?.[0]?.delta?.content as string | undefined;
+          if (content) {
+            assistantContent += content;
+            setMessages((prev) => {
+              const newMessages = [...prev];
+              newMessages[newMessages.length - 1] = {
+                role: "assistant",
+                content: assistantContent,
+              };
+              return newMessages;
+            });
+          }
+        } catch {
+          textBuffer = line + "\n" + textBuffer;
+          break;
+        }
+      }
+    }
+
+    // Final flush
+    if (textBuffer.trim()) {
+      for (let raw of textBuffer.split("\n")) {
+        if (!raw) continue;
+        if (raw.endsWith("\r")) raw = raw.slice(0, -1);
+        if (raw.startsWith(":") || raw.trim() === "") continue;
+        if (!raw.startsWith("data: ")) continue;
+        const jsonStr = raw.slice(6).trim();
+        if (jsonStr === "[DONE]") continue;
+        try {
+          const parsed = JSON.parse(jsonStr);
+          const content = parsed.choices?.[0]?.delta?.content as string | undefined;
+          if (content) {
+            assistantContent += content;
+            setMessages((prev) => {
+              const newMessages = [...prev];
+              newMessages[newMessages.length - 1] = {
+                role: "assistant",
+                content: assistantContent,
+              };
+              return newMessages;
+            });
+          }
+        } catch {}
+      }
+    }
+  };
+
+  const handleSend = async () => {
+    if (!input.trim() || isLoading) return;
+
+    const userMessage: Message = { role: "user", content: input };
+    const newMessages = [...messages, userMessage];
+    
+    setMessages(newMessages);
+    setInput("");
+    setIsLoading(true);
+
+    try {
+      await streamChat(newMessages);
+    } catch (error) {
+      console.error("Error sending message:", error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to send message",
+        variant: "destructive",
+      });
+      // Remove the empty assistant message on error
+      setMessages((prev) => prev.slice(0, -1));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
 
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-8">
-      {/* Progress Steps */}
-      <div className="grid grid-cols-4 gap-4">
-        {steps.map((step, index) => {
-          const Icon = step.icon;
-          const isActive = step.id === currentStep;
-          const isCompleted = index < getCurrentStepIndex();
-          
-          return (
-            <motion.div
-              key={step.id}
-              className={`relative p-6 rounded-2xl border-2 transition-all ${
-                isActive 
-                  ? 'border-primary bg-primary/5 shadow-lg shadow-primary/20' 
-                  : isCompleted
-                  ? 'border-green-500 bg-green-500/5'
-                  : 'border-border/50 bg-background/50'
-              }`}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <div className="flex flex-col items-center text-center gap-3">
-                <div className={`w-14 h-14 rounded-full flex items-center justify-center ${
-                  isActive 
-                    ? 'bg-primary text-primary-foreground' 
-                    : isCompleted
-                    ? 'bg-green-500 text-white'
-                    : 'bg-muted text-muted-foreground'
-                }`}>
-                  {isCompleted ? (
-                    <CheckCircle2 className="w-7 h-7" />
-                  ) : (
-                    <Icon className="w-7 h-7" />
-                  )}
-                </div>
-                <div>
-                  <h4 className={`font-semibold ${isActive ? 'text-primary' : 'text-foreground'}`}>
-                    {step.label}
-                  </h4>
-                  <p className="text-xs text-muted-foreground mt-1">{step.description}</p>
-                </div>
-              </div>
-              {isActive && (
-                <motion.div
-                  className="absolute inset-0 rounded-2xl border-2 border-primary"
-                  animate={{ scale: [1, 1.05, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                />
-              )}
-            </motion.div>
-          );
-        })}
-      </div>
-
-      {/* Chat Interface */}
-      <motion.div
-        className="bg-gradient-to-br from-background via-background to-primary/5 rounded-3xl border border-border/50 shadow-2xl overflow-hidden"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-      >
+    <div className="w-full max-w-4xl mx-auto">
+      <div className="bg-card rounded-lg shadow-lg overflow-hidden border border-border">
         {/* Header */}
-        <div className="bg-primary/10 backdrop-blur-xl border-b border-border/50 px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-                  <Sparkles className="w-6 h-6 text-primary" />
-                </div>
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background animate-pulse" />
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-foreground">AI Business Consultant</h3>
-                <p className="text-sm text-muted-foreground">No sales calls, no tension</p>
-              </div>
+        <div className="bg-primary/5 border-b border-border p-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <MessageCircle className="w-5 h-5 text-primary" />
             </div>
-            {currentStep === "integration" && (
-              <Button className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70">
-                <Rocket className="w-4 h-4 mr-2" />
-                Start Building
-              </Button>
-            )}
+            <div>
+              <h3 className="font-semibold text-foreground">AI Assistant</h3>
+              <p className="text-sm text-muted-foreground">
+                Ask us anything about our services
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Chat Messages */}
-        <div className="p-8 space-y-6 min-h-[500px] max-h-[500px] overflow-y-auto">
+        {/* Messages Area */}
+        <div className="h-[500px] overflow-y-auto p-6 space-y-4 bg-background">
           <AnimatePresence mode="popLayout">
             {messages.map((message, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, x: message.role === "user" ? 20 : -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.4 }}
-                className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className={`flex ${
+                  message.role === "user" ? "justify-end" : "justify-start"
+                }`}
               >
                 <div
-                  className={`max-w-[85%] rounded-2xl px-6 py-4 ${
+                  className={`max-w-[80%] rounded-lg p-4 ${
                     message.role === "user"
-                      ? "bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-lg"
-                      : "bg-muted/50 text-foreground border border-border/50"
+                      ? "bg-primary text-primary-foreground ml-auto"
+                      : "bg-muted text-foreground"
                   }`}
                 >
-                  <p className="text-sm leading-relaxed whitespace-pre-line">{message.text}</p>
+                  <div className="text-sm leading-relaxed">
+                    {message.role === "assistant" ? (
+                      renderMarkdown(message.content)
+                    ) : (
+                      message.content
+                    )}
+                  </div>
                 </div>
               </motion.div>
             ))}
           </AnimatePresence>
+          {isLoading && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex justify-start"
+            >
+              <div className="bg-muted rounded-lg p-4 flex items-center gap-2">
+                <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                <span className="text-sm text-muted-foreground">Thinking...</span>
+              </div>
+            </motion.div>
+          )}
+          <div ref={messagesEndRef} />
         </div>
 
         {/* Input Area */}
-        <div className="border-t border-border/50 bg-muted/30 backdrop-blur-xl p-6">
-          <div className="flex gap-3">
-            <div className="flex-1 relative">
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                placeholder="Type your message..."
-                className="w-full bg-background border border-border rounded-xl px-6 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-              />
-              <MessageSquare className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-            </div>
-            <motion.button
+        <div className="border-t border-border p-4 bg-card">
+          <div className="flex gap-2">
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Type your message..."
+              className="flex-1"
+              disabled={isLoading}
+            />
+            <Button
               onClick={handleSend}
-              className="bg-primary text-primary-foreground rounded-xl px-8 py-4 font-medium hover:bg-primary/90 transition-colors flex items-center gap-2"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              disabled={!input.trim() || isLoading}
+              size="icon"
+              className="shrink-0"
             >
-              <Send className="w-5 h-5" />
-              Send
-            </motion.button>
+              {isLoading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Send className="w-4 h-4" />
+              )}
+            </Button>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };
