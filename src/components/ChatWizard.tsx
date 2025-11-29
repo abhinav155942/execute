@@ -24,14 +24,17 @@ const ChatWizard = () => {
   const { toast } = useToast();
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    // Only scroll within the chat container
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
   };
 
   useEffect(() => {
     // Only auto-scroll if user is near bottom (within 100px)
     const messagesContainer = messagesEndRef.current?.parentElement;
     if (messagesContainer) {
-      const isNearBottom = messagesContainer.scrollHeight - messagesContainer.scrollTop - messagesContainer.clientHeight < 100;
+      const isNearBottom = messagesContainer.scrollHeight - messagesContainer.scrollTop - messagesContainer.clientHeight < 150;
       if (isNearBottom) {
         scrollToBottom();
       }
