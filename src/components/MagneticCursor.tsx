@@ -52,33 +52,22 @@ export const MagneticCursor = () => {
   }, [cursorX, cursorY]);
 
   return (
-    <>
+    <motion.div
+      className="fixed pointer-events-none z-[9999]"
+      style={{
+        left: cursorXSpring,
+        top: cursorYSpring,
+        x: "-50%",
+        y: "-50%",
+      }}
+    >
       <motion.div
-        className="fixed top-0 left-0 w-4 h-4 bg-accent rounded-full pointer-events-none z-[9999] mix-blend-difference"
-        style={{
-          x: cursorXSpring,
-          y: cursorYSpring,
-          translateX: '-50%',
-          translateY: '-50%',
-        }}
+        className="w-2 h-2 rounded-full bg-black"
         animate={{
-          scale: isHovering ? 1.5 : 1,
+          scale: isHovering ? 2 : 1,
         }}
-        transition={{ duration: 0.2 }}
+        transition={{ type: "spring", stiffness: 400, damping: 28 }}
       />
-      <motion.div
-        className="fixed top-0 left-0 w-10 h-10 border-2 border-accent/30 rounded-full pointer-events-none z-[9998] mix-blend-difference"
-        style={{
-          x: cursorXSpring,
-          y: cursorYSpring,
-          translateX: '-50%',
-          translateY: '-50%',
-        }}
-        animate={{
-          scale: isHovering ? 1.8 : 1,
-        }}
-        transition={{ duration: 0.3 }}
-      />
-    </>
+    </motion.div>
   );
 };
