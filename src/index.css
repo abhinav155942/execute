@@ -67,6 +67,7 @@
     --shadow-medium: 0 8px 40px hsl(0 0% 0% / 0.08);
     --shadow-large: 0 16px 64px hsl(0 0% 0% / 0.1);
     --shadow-glow: 0 0 48px hsl(250 100% 70% / 0.3);
+    --shadow-elegant: 0 10px 40px hsl(250 100% 70% / 0.15);
     
     /* Smooth Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -143,6 +144,10 @@
     box-shadow: var(--shadow-glow);
   }
   
+  .shadow-elegant {
+    box-shadow: var(--shadow-elegant);
+  }
+  
   .hover-lift {
     transition: var(--transition-smooth);
   }
@@ -162,6 +167,14 @@
   
   .slide-up {
     animation: slideUp 0.8s ease-out forwards;
+  }
+  
+  .cursor-none {
+    cursor: none !important;
+  }
+  
+  .cursor-none * {
+    cursor: none !important;
   }
 }
 

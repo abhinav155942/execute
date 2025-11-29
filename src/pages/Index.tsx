@@ -1,12 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Zap, Layers, Clock, DollarSign, Rocket, Mail, Linkedin, ChevronDown } from "lucide-react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, useScroll, useTransform, useInView, useMotionValue, useSpring } from "framer-motion";
 import { useRef } from "react";
 import heroImage from "@/assets/hero-devices.jpg";
 import project1 from "@/assets/project-1.jpg";
 import project2 from "@/assets/project-2.jpg";
 import project3 from "@/assets/project-3.jpg";
 import signatureWork from "@/assets/signature-work.jpg";
+import { MagneticCursor } from "@/components/MagneticCursor";
+import { TechStack } from "@/components/TechStack";
 
 const FadeInSection = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {
   const ref = useRef(null);
@@ -36,7 +38,8 @@ const Index = () => {
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 100]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-inter">
+    <div className="min-h-screen bg-background text-foreground font-inter cursor-none">
+      <MagneticCursor />
       {/* Hero Section */}
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center px-6 md:px-12 overflow-hidden">
         {/* Animated Gradient Glow Background */}
@@ -79,19 +82,32 @@ const Index = () => {
               </motion.div>
               
               <motion.h1 
-                className="text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tight leading-[1.1]"
+                className="text-6xl md:text-8xl lg:text-9xl font-semibold tracking-tight leading-[0.95]"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
               >
                 Building the Future with{" "}
-                <span className="bg-gradient-to-r from-accent to-purple-600 bg-clip-text text-transparent">
+                <motion.span 
+                  className="bg-gradient-to-r from-accent via-purple-600 to-accent bg-clip-text text-transparent inline-block"
+                  animate={{
+                    backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                  }}
+                  transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
+                  style={{
+                    backgroundSize: '200% 200%'
+                  }}
+                >
                   AI, Automation & Design
-                </span>
+                </motion.span>
               </motion.h1>
               
               <motion.p 
-                className="text-xl md:text-2xl text-muted-foreground font-light max-w-2xl leading-relaxed"
+                className="text-2xl md:text-3xl text-muted-foreground font-light max-w-2xl leading-relaxed"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.5 }}
@@ -100,54 +116,84 @@ const Index = () => {
               </motion.p>
               
               <motion.div 
-                className="flex flex-wrap gap-4 pt-4"
+                className="flex flex-wrap gap-4 pt-6"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.7 }}
               >
-                <Button 
-                  size="lg" 
-                  className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-6 text-lg font-medium hover-lift group"
-                  onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  See Our Work
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-                <Button 
-                  size="lg" 
-                  variant="outline"
-                  className="rounded-full px-8 py-6 text-lg font-medium border-2 hover-lift"
-                  onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                  <Button 
+                    size="lg" 
+                    className="magnetic-item bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-10 py-7 text-xl font-medium group shadow-elegant"
+                    onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+                  >
+                    See Our Work
+                    <ArrowRight className="ml-2 w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </motion.div>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  Let's Connect
-                </Button>
+                  <Button 
+                    size="lg" 
+                    variant="outline"
+                    className="magnetic-item rounded-full px-10 py-7 text-xl font-medium border-2"
+                    onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                  >
+                    Let's Connect
+                  </Button>
+                </motion.div>
               </motion.div>
             </motion.div>
             
             {/* Right: Hero Image */}
             <motion.div 
-              className="relative"
+              className="relative lg:scale-110"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
               style={{ y: heroY }}
             >
               <motion.div 
-                className="relative rounded-3xl overflow-hidden shadow-2xl"
-                whileHover={{ scale: 1.02 }}
+                className="magnetic-item relative rounded-3xl overflow-hidden shadow-2xl"
+                whileHover={{ scale: 1.02, rotateY: 5 }}
                 transition={{ duration: 0.4 }}
               >
-                <img 
+                <motion.img 
                   src={heroImage} 
                   alt="AI Interface Mockup" 
                   className="w-full h-auto"
+                  animate={{
+                    y: [0, -10, 0]
+                  }}
+                  transition={{
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+                {/* Scan line effect */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/20 to-transparent"
+                  animate={{
+                    y: ['-100%', '200%']
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
                 />
               </motion.div>
               {/* Floating glow effect */}
               <motion.div 
-                className="absolute -inset-4 bg-gradient-to-r from-accent/20 to-purple-600/20 blur-3xl -z-10"
+                className="absolute -inset-6 bg-gradient-to-r from-accent/30 to-purple-600/30 blur-3xl -z-10"
                 animate={{
-                  opacity: [0.4, 0.6, 0.4],
+                  opacity: [0.4, 0.7, 0.4],
                   scale: [0.95, 1.05, 0.95]
                 }}
                 transition={{
@@ -222,74 +268,137 @@ const Index = () => {
               }
             ].map((service, i) => (
               <FadeInSection key={i} delay={i * 0.2}>
-                <div className="glass-card rounded-3xl p-10 hover-lift group cursor-pointer h-full">
-                  <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
-                    <service.icon className="w-8 h-8 text-accent" />
+                <motion.div 
+                  className="magnetic-item glass-card rounded-3xl p-10 group cursor-pointer h-full relative overflow-hidden"
+                  whileHover={{ y: -8 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-br from-accent/0 to-accent/0 group-hover:from-accent/5 group-hover:to-accent/10"
+                    transition={{ duration: 0.5 }}
+                  />
+                  <div className="relative z-10">
+                    <motion.div 
+                      className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors"
+                      whileHover={{ rotate: 360, scale: 1.1 }}
+                      transition={{ duration: 0.6 }}
+                    >
+                      <service.icon className="w-8 h-8 text-accent" />
+                    </motion.div>
+                    <h3 className="text-2xl font-semibold mb-4">{service.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed">{service.description}</p>
                   </div>
-                  <h3 className="text-2xl font-semibold mb-4">{service.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{service.description}</p>
-                </div>
+                </motion.div>
               </FadeInSection>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Past Projects Section */}
-      <section id="projects" className="py-32 px-6 md:px-12">
-        <div className="container mx-auto max-w-7xl">
+      {/* Past Projects Section - Horizontal Scrolling Gallery */}
+      <section id="projects" className="py-32 overflow-hidden">
+        <div className="container mx-auto max-w-7xl px-6 md:px-12 mb-12">
           <FadeInSection>
-            <div className="text-center mb-20 space-y-4">
+            <div className="text-center space-y-4">
               <h2 className="text-4xl md:text-6xl font-semibold tracking-tight">Past Projects We've Executed</h2>
               <p className="text-xl text-muted-foreground font-light max-w-2xl mx-auto">
-                A look at the systems, interfaces, and AI workflows we've built
+                Drag to explore our portfolio of systems and interfaces
               </p>
             </div>
           </FadeInSection>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                image: project1,
-                title: "Enterprise SaaS Platform",
-                outcome: "Reduced manual workload by 60%"
-              },
-              {
-                image: project2,
-                title: "AI Agent System",
-                outcome: "Response time: 9 min → 18 sec"
-              },
-              {
-                image: project3,
-                title: "Mobile App Redesign",
-                outcome: "User retention increased 45%"
-              }
-            ].map((project, i) => (
-              <FadeInSection key={i} delay={i * 0.15}>
-                <div className="group cursor-pointer overflow-hidden rounded-3xl hover-lift">
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    <img 
-                      src={project.image} 
-                      alt={project.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    <div className="absolute bottom-0 left-0 right-0 p-8 text-white transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                      <h3 className="text-2xl font-semibold mb-2">{project.title}</h3>
-                      <p className="text-sm font-light">{project.outcome}</p>
-                    </div>
-                  </div>
+        </div>
+        
+        <motion.div 
+          className="flex gap-8 px-6 md:px-12 cursor-grab active:cursor-grabbing"
+          drag="x"
+          dragConstraints={{ left: -2000, right: 0 }}
+          dragElastic={0.1}
+          dragTransition={{ bounceStiffness: 300, bounceDamping: 30 }}
+        >
+          {[
+            {
+              image: project1,
+              title: "Enterprise SaaS Platform",
+              outcome: "Reduced manual workload by 60%",
+              tags: ["AI Automation", "Dashboard UI"]
+            },
+            {
+              image: project2,
+              title: "AI Agent System",
+              outcome: "Response time: 9 min → 18 sec",
+              tags: ["Machine Learning", "API Integration"]
+            },
+            {
+              image: project3,
+              title: "Mobile App Redesign",
+              outcome: "User retention increased 45%",
+              tags: ["UI/UX", "User Research"]
+            },
+            {
+              image: project1,
+              title: "Analytics Platform",
+              outcome: "Real-time insights at scale",
+              tags: ["Data Visualization", "Cloud Infrastructure"]
+            },
+            {
+              image: project2,
+              title: "E-commerce Automation",
+              outcome: "Order processing speed +80%",
+              tags: ["Workflow Automation", "Integration"]
+            }
+          ].map((project, i) => (
+            <motion.div
+              key={i}
+              className="magnetic-item min-w-[400px] md:min-w-[500px] group"
+              whileHover={{ y: -10 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="relative rounded-3xl overflow-hidden shadow-elegant">
+                <div className="aspect-[4/3] overflow-hidden">
+                  <motion.img 
+                    src={project.image} 
+                    alt={project.title}
+                    className="w-full h-full object-cover"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.6 }}
+                  />
                 </div>
-              </FadeInSection>
-            ))}
-          </div>
-          
-          <FadeInSection delay={0.5}>
-            <div className="text-center mt-12">
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"
+                  initial={{ opacity: 0.6 }}
+                  whileHover={{ opacity: 1 }}
+                />
+                <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
+                  <motion.div
+                    initial={{ y: 10, opacity: 0.8 }}
+                    whileHover={{ y: 0, opacity: 1 }}
+                  >
+                    <h3 className="text-3xl font-semibold mb-3">{project.title}</h3>
+                    <p className="text-lg font-light mb-4 text-white/90">{project.outcome}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {project.tags.map((tag, idx) => (
+                        <span 
+                          key={idx}
+                          className="text-xs px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm border border-white/30"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </motion.div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+        
+        <div className="container mx-auto max-w-7xl px-6 md:px-12 mt-12">
+          <FadeInSection>
+            <div className="text-center">
               <Button 
                 variant="ghost" 
                 size="lg"
-                className="rounded-full text-lg group"
+                className="magnetic-item rounded-full text-lg group"
               >
                 Explore Full Case Studies
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -303,19 +412,34 @@ const Index = () => {
       <section className="py-32 px-6 md:px-12 bg-grey-50">
         <div className="container mx-auto max-w-7xl">
           <FadeInSection>
-            <div className="rounded-3xl overflow-hidden shadow-2xl">
-              <img 
+            <motion.div 
+              className="magnetic-item rounded-3xl overflow-hidden shadow-2xl"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.4 }}
+            >
+              <motion.img 
                 src={signatureWork} 
                 alt="Signature Work" 
                 className="w-full h-auto"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.6 }}
               />
-            </div>
-            <p className="text-center text-muted-foreground mt-8 text-lg font-light">
+            </motion.div>
+            <motion.p 
+              className="text-center text-muted-foreground mt-8 text-lg font-light"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+            >
               Premium e-commerce platform — Full-stack development with AI-powered recommendations
-            </p>
+            </motion.p>
           </FadeInSection>
         </div>
       </section>
+
+      {/* Tech Stack Section */}
+      <TechStack />
 
       {/* About Section */}
       <section className="py-32 px-6 md:px-12">
@@ -390,14 +514,19 @@ const Index = () => {
           
           <FadeInSection delay={0.6}>
             <div className="text-center mt-12">
-              <Button 
-                size="lg"
-                className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-6 text-lg font-medium hover-lift group"
-                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Let's Build Together
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
+                <Button 
+                  size="lg"
+                  className="magnetic-item bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-6 text-lg font-medium group shadow-elegant"
+                  onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                >
+                  Let's Build Together
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </motion.div>
             </div>
           </FadeInSection>
         </div>
@@ -423,13 +552,21 @@ const Index = () => {
               { icon: Rocket, title: "UI Design & System Builds", description: "Premium interfaces with design systems" }
             ].map((service, i) => (
               <FadeInSection key={i} delay={i * 0.15}>
-                <div className="glass-card rounded-2xl p-8 hover-lift group cursor-pointer text-center h-full">
-                  <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-4 mx-auto group-hover:bg-accent/20 transition-colors">
+                <motion.div 
+                  className="magnetic-item glass-card rounded-2xl p-8 group cursor-pointer text-center h-full"
+                  whileHover={{ y: -8 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <motion.div 
+                    className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-4 mx-auto group-hover:bg-accent/20 transition-colors"
+                    whileHover={{ rotate: 360 }}
+                    transition={{ duration: 0.5 }}
+                  >
                     <service.icon className="w-7 h-7 text-accent" />
-                  </div>
+                  </motion.div>
                   <h3 className="text-lg font-semibold mb-2">{service.title}</h3>
                   <p className="text-sm text-muted-foreground">{service.description}</p>
-                </div>
+                </motion.div>
               </FadeInSection>
             ))}
           </div>
