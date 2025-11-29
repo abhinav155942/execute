@@ -376,8 +376,8 @@ const Index = () => {
         <div className="container mx-auto max-w-7xl">
           <FadeInSection>
             <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold mb-4">Experience AI-Powered Conversations</h2>
-              <p className="text-muted-foreground text-lg">Chat with our intelligent assistant in real-time</p>
+              <h2 className="text-4xl md:text-5xl font-bold mb-4">From Idea to Demo in Minutes</h2>
+              <p className="text-muted-foreground text-lg max-w-2xl mx-auto">No sales calls, no tension. Just chat with our AI, explain your business, and watch as we create a custom plan, build a demo, and help you integrate - all seamlessly.</p>
             </div>
             <ChatWizard />
           </FadeInSection>
