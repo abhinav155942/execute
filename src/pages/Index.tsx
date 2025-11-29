@@ -97,7 +97,7 @@ const Index = () => {
                 
               </motion.div>
               
-              <motion.h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[0.95]" initial={{
+              <motion.h1 initial={{
               opacity: 0,
               y: 20
             }} animate={{
@@ -106,7 +106,7 @@ const Index = () => {
             }} transition={{
               duration: 0.8,
               delay: 0.3
-            }}>
+            }} className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[0.95] text-center">
                 Building the Future with{" "}
                 <motion.span className="bg-gradient-to-r from-accent via-purple-600 to-accent bg-clip-text text-transparent inline-block" animate={{
                 backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
@@ -447,7 +447,9 @@ const Index = () => {
               delay: 0.1
             }} className="glass-card magnetic-item p-8 text-center hover-lift">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <Rocket className="w-8 h-8 text-primary" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }} />
+                  <Rocket className="w-8 h-8 text-primary" style={{
+                  filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
+                }} />
                 </div>
                 <h3 className="text-2xl font-semibold mb-4">Unlimited 24hr Demos</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -467,7 +469,9 @@ const Index = () => {
               delay: 0.2
             }} className="glass-card magnetic-item p-8 text-center hover-lift">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-accent/20 to-purple-500/20 flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <RefreshCw className="w-8 h-8 text-accent" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }} />
+                  <RefreshCw className="w-8 h-8 text-accent" style={{
+                  filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
+                }} />
                 </div>
                 <h3 className="text-2xl font-semibold mb-4">Always Up-to-Date</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -487,7 +491,9 @@ const Index = () => {
               delay: 0.3
             }} className="glass-card magnetic-item p-8 text-center hover-lift">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500/20 to-primary/20 flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <Gem className="w-8 h-8 text-purple-500" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }} />
+                  <Gem className="w-8 h-8 text-purple-500" style={{
+                  filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
+                }} />
                 </div>
                 <h3 className="text-2xl font-semibold mb-4">Flexible Pricing</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -549,11 +555,12 @@ const Index = () => {
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {/* Premium Subscription */}
             <FadeInSection delay={0.1}>
-              <motion.div 
-                className="glass-card magnetic-item rounded-3xl p-10 relative overflow-hidden group"
-                whileHover={{ y: -8, scale: 1.02 }}
-                transition={{ duration: 0.3 }}
-              >
+              <motion.div className="glass-card magnetic-item rounded-3xl p-10 relative overflow-hidden group" whileHover={{
+              y: -8,
+              scale: 1.02
+            }} transition={{
+              duration: 0.3
+            }}>
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 
                 <div className="relative z-10">
@@ -570,28 +577,15 @@ const Index = () => {
                   </div>
 
                   <div className="space-y-4 mb-8">
-                    {[
-                      "Access to all AI agents",
-                      "Email functionality included",
-                      "Instant updates to new AI models",
-                      "Priority support (24/7)",
-                      "Monthly system improvements",
-                      "Cancel anytime",
-                      "Unlimited 24hr demos"
-                    ].map((feature, idx) => (
-                      <div key={idx} className="flex items-start gap-3">
+                    {["Access to all AI agents", "Email functionality included", "Instant updates to new AI models", "Priority support (24/7)", "Monthly system improvements", "Cancel anytime", "Unlimited 24hr demos"].map((feature, idx) => <div key={idx} className="flex items-start gap-3">
                         <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center mt-0.5 flex-shrink-0">
                           <Check className="w-3 h-3 text-primary" />
                         </div>
                         <span className="text-foreground">{feature}</span>
-                      </div>
-                    ))}
+                      </div>)}
                   </div>
 
-                  <Button 
-                    size="lg" 
-                    className="w-full rounded-full text-lg py-6 group-hover:shadow-elegant transition-all"
-                  >
+                  <Button size="lg" className="w-full rounded-full text-lg py-6 group-hover:shadow-elegant transition-all">
                     Start Subscription
                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
@@ -601,11 +595,12 @@ const Index = () => {
 
             {/* Lifetime Access */}
             <FadeInSection delay={0.2}>
-              <motion.div 
-                className="glass-card magnetic-item rounded-3xl p-10 relative overflow-hidden group"
-                whileHover={{ y: -8, scale: 1.02 }}
-                transition={{ duration: 0.3 }}
-              >
+              <motion.div className="glass-card magnetic-item rounded-3xl p-10 relative overflow-hidden group" whileHover={{
+              y: -8,
+              scale: 1.02
+            }} transition={{
+              duration: 0.3
+            }}>
                 <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 
                 <div className="relative z-10">
@@ -622,37 +617,38 @@ const Index = () => {
                   </div>
 
                   <div className="space-y-4 mb-8">
-                    {[
-                      { text: "Access to all AI agents", included: true },
-                      { text: "Email functionality included", included: true },
-                      { text: "Instant updates to new AI models", included: false },
-                      { text: "Priority support (24/7)", included: true },
-                      { text: "One-time purchase", included: true },
-                      { text: "No recurring fees", included: true },
-                      { text: "Unlimited 24hr demos", included: true }
-                    ].map((feature, idx) => (
-                      <div key={idx} className="flex items-start gap-3">
-                        <div className={`w-5 h-5 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0 ${
-                          feature.included ? 'bg-accent/10' : 'bg-muted'
-                        }`}>
-                          {feature.included ? (
-                            <Check className="w-3 h-3 text-accent" />
-                          ) : (
-                            <X className="w-3 h-3 text-muted-foreground" />
-                          )}
+                    {[{
+                    text: "Access to all AI agents",
+                    included: true
+                  }, {
+                    text: "Email functionality included",
+                    included: true
+                  }, {
+                    text: "Instant updates to new AI models",
+                    included: false
+                  }, {
+                    text: "Priority support (24/7)",
+                    included: true
+                  }, {
+                    text: "One-time purchase",
+                    included: true
+                  }, {
+                    text: "No recurring fees",
+                    included: true
+                  }, {
+                    text: "Unlimited 24hr demos",
+                    included: true
+                  }].map((feature, idx) => <div key={idx} className="flex items-start gap-3">
+                        <div className={`w-5 h-5 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0 ${feature.included ? 'bg-accent/10' : 'bg-muted'}`}>
+                          {feature.included ? <Check className="w-3 h-3 text-accent" /> : <X className="w-3 h-3 text-muted-foreground" />}
                         </div>
                         <span className={feature.included ? 'text-foreground' : 'text-muted-foreground'}>
                           {feature.text}
                         </span>
-                      </div>
-                    ))}
+                      </div>)}
                   </div>
 
-                  <Button 
-                    size="lg" 
-                    variant="outline"
-                    className="w-full rounded-full text-lg py-6 border-2 group-hover:shadow-elegant transition-all"
-                  >
+                  <Button size="lg" variant="outline" className="w-full rounded-full text-lg py-6 border-2 group-hover:shadow-elegant transition-all">
                     Contact for Quote
                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
