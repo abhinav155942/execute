@@ -91,9 +91,7 @@ const Index = () => {
               duration: 0.6,
               delay: 0.2
             }}>
-                <div className="inline-block mb-6 px-4 py-2 rounded-full bg-accent/10 border border-accent/20">
-                  <span className="text-sm font-medium text-accent">Execute Agency</span>
-                </div>
+                
               </motion.div>
               
               <motion.h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[0.95]" initial={{
