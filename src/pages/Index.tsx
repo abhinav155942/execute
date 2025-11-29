@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, Zap, Layers, Clock, DollarSign, Rocket, Mail, Linkedin, ChevronDown } from "lucide-react";
+import { ArrowRight, Sparkles, Zap, Layers, Clock, DollarSign, Rocket, Mail, Linkedin, ChevronDown, Gem, RefreshCw, Check, X } from "lucide-react";
 import { motion, useScroll, useTransform, useInView, useMotionValue, useSpring } from "framer-motion";
 import { useRef } from "react";
 import heroImage from "@/assets/hero-devices.jpg";
@@ -9,6 +9,7 @@ import leadGen from "@/assets/project-lead-gen.jpg";
 import signatureWork from "@/assets/signature-work.jpg";
 import { MagneticCursor } from "@/components/MagneticCursor";
 import { TechStack } from "@/components/TechStack";
+import { FloatingNav } from "@/components/FloatingNav";
 const FadeInSection = ({
   children,
   delay = 0
@@ -51,6 +52,7 @@ const Index = () => {
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 100]);
   return <div className="min-h-screen bg-background text-foreground font-inter cursor-none">
       <MagneticCursor />
+      <FloatingNav />
       {/* Hero Section */}
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center px-6 md:px-12 overflow-hidden">
         {/* Animated Gradient Glow Background */}
@@ -399,7 +401,9 @@ const Index = () => {
       </section>
 
       {/* Tech Stack Section */}
-      <TechStack />
+      <div id="tech-stack">
+        <TechStack />
+      </div>
 
       {/* About Section */}
       <section className="py-32 px-6 md:px-12">
@@ -428,7 +432,7 @@ const Index = () => {
 
       {/* Differentiator / Offer Section */}
       <FadeInSection>
-        <section className="py-32 px-6 md:px-12 relative overflow-hidden">
+        <section id="differentiator" className="py-32 px-6 md:px-12 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-purple-500/5" />
           <div className="container mx-auto max-w-6xl relative z-10">
             <motion.div initial={{
@@ -458,8 +462,8 @@ const Index = () => {
             }} transition={{
               delay: 0.1
             }} className="glass-card magnetic-item p-8 text-center hover-lift">
-                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-                  <span className="text-3xl">🚀</span>
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <Rocket className="w-8 h-8 text-primary" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }} />
                 </div>
                 <h3 className="text-2xl font-semibold mb-4">Unlimited 24hr Demos</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -478,8 +482,8 @@ const Index = () => {
             }} transition={{
               delay: 0.2
             }} className="glass-card magnetic-item p-8 text-center hover-lift">
-                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-                  <span className="text-3xl">🔄</span>
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-accent/20 to-purple-500/20 flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <RefreshCw className="w-8 h-8 text-accent" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }} />
                 </div>
                 <h3 className="text-2xl font-semibold mb-4">Always Up-to-Date</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -498,8 +502,8 @@ const Index = () => {
             }} transition={{
               delay: 0.3
             }} className="glass-card magnetic-item p-8 text-center hover-lift">
-                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-                  <span className="text-3xl">💎</span>
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500/20 to-primary/20 flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <Gem className="w-8 h-8 text-purple-500" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }} />
                 </div>
                 <h3 className="text-2xl font-semibold mb-4">Flexible Pricing</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -546,8 +550,145 @@ const Index = () => {
         </section>
       </FadeInSection>
 
+      {/* Pricing Section */}
+      <section id="pricing" className="py-32 px-6 md:px-12 bg-grey-50">
+        <div className="container mx-auto max-w-7xl">
+          <FadeInSection>
+            <div className="text-center mb-20 space-y-4">
+              <h2 className="text-4xl md:text-6xl font-semibold tracking-tight">Pricing Plans</h2>
+              <p className="text-xl text-muted-foreground font-light max-w-2xl mx-auto">
+                Choose the plan that fits your needs. Both options include all features and premium support.
+              </p>
+            </div>
+          </FadeInSection>
+
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            {/* Premium Subscription */}
+            <FadeInSection delay={0.1}>
+              <motion.div 
+                className="glass-card magnetic-item rounded-3xl p-10 relative overflow-hidden group"
+                whileHover={{ y: -8, scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <div className="relative z-10">
+                  <div className="mb-8">
+                    <div className="inline-block px-4 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+                      Most Popular
+                    </div>
+                    <h3 className="text-3xl font-semibold mb-2">Premium Subscription</h3>
+                    <div className="flex items-baseline gap-2 mb-4">
+                      <span className="text-5xl font-bold">$49</span>
+                      <span className="text-muted-foreground">/month</span>
+                    </div>
+                    <p className="text-muted-foreground">Perfect for businesses that want to stay ahead</p>
+                  </div>
+
+                  <div className="space-y-4 mb-8">
+                    {[
+                      "Access to all AI agents",
+                      "Email functionality included",
+                      "Instant updates to new AI models",
+                      "Priority support (24/7)",
+                      "Monthly system improvements",
+                      "Cancel anytime",
+                      "Unlimited 24hr demos"
+                    ].map((feature, idx) => (
+                      <div key={idx} className="flex items-start gap-3">
+                        <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center mt-0.5 flex-shrink-0">
+                          <Check className="w-3 h-3 text-primary" />
+                        </div>
+                        <span className="text-foreground">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Button 
+                    size="lg" 
+                    className="w-full rounded-full text-lg py-6 group-hover:shadow-elegant transition-all"
+                  >
+                    Start Subscription
+                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </div>
+              </motion.div>
+            </FadeInSection>
+
+            {/* Lifetime Access */}
+            <FadeInSection delay={0.2}>
+              <motion.div 
+                className="glass-card magnetic-item rounded-3xl p-10 relative overflow-hidden group"
+                whileHover={{ y: -8, scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <div className="relative z-10">
+                  <div className="mb-8">
+                    <div className="inline-block px-4 py-1 rounded-full bg-accent/10 text-accent text-sm font-medium mb-4">
+                      One-Time Payment
+                    </div>
+                    <h3 className="text-3xl font-semibold mb-2">Lifetime Access</h3>
+                    <div className="flex items-baseline gap-2 mb-4">
+                      <span className="text-5xl font-bold">Custom</span>
+                      <span className="text-muted-foreground">pricing</span>
+                    </div>
+                    <p className="text-muted-foreground">Pay once, own it forever</p>
+                  </div>
+
+                  <div className="space-y-4 mb-8">
+                    {[
+                      { text: "Access to all AI agents", included: true },
+                      { text: "Email functionality included", included: true },
+                      { text: "Instant updates to new AI models", included: false },
+                      { text: "Priority support (24/7)", included: true },
+                      { text: "One-time purchase", included: true },
+                      { text: "No recurring fees", included: true },
+                      { text: "Unlimited 24hr demos", included: true }
+                    ].map((feature, idx) => (
+                      <div key={idx} className="flex items-start gap-3">
+                        <div className={`w-5 h-5 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0 ${
+                          feature.included ? 'bg-accent/10' : 'bg-muted'
+                        }`}>
+                          {feature.included ? (
+                            <Check className="w-3 h-3 text-accent" />
+                          ) : (
+                            <X className="w-3 h-3 text-muted-foreground" />
+                          )}
+                        </div>
+                        <span className={feature.included ? 'text-foreground' : 'text-muted-foreground'}>
+                          {feature.text}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Button 
+                    size="lg" 
+                    variant="outline"
+                    className="w-full rounded-full text-lg py-6 border-2 group-hover:shadow-elegant transition-all"
+                  >
+                    Contact for Quote
+                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </div>
+              </motion.div>
+            </FadeInSection>
+          </div>
+
+          <FadeInSection delay={0.3}>
+            <div className="text-center mt-12">
+              <p className="text-muted-foreground text-lg">
+                Not sure which plan? <button className="text-primary font-medium hover:underline">Start a free 24hr demo</button>
+              </p>
+            </div>
+          </FadeInSection>
+        </div>
+      </section>
+
       {/* How I Can Benefit You */}
-      <section className="py-32 px-6 md:px-12 bg-grey-50">
+      <section className="py-32 px-6 md:px-12">
         <div className="container mx-auto max-w-7xl">
           <FadeInSection>
             <div className="text-center mb-20 space-y-4">
