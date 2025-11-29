@@ -28,7 +28,14 @@ const ChatWizard = () => {
   };
 
   useEffect(() => {
-    scrollToBottom();
+    // Only auto-scroll if user is near bottom (within 100px)
+    const messagesContainer = messagesEndRef.current?.parentElement;
+    if (messagesContainer) {
+      const isNearBottom = messagesContainer.scrollHeight - messagesContainer.scrollTop - messagesContainer.clientHeight < 100;
+      if (isNearBottom) {
+        scrollToBottom();
+      }
+    }
   }, [messages]);
 
   const streamChat = async (messages: Message[]) => {

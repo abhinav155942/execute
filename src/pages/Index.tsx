@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Zap, Layers, Clock, DollarSign, Rocket, Mail, Linkedin, ChevronDown, Gem, RefreshCw, Check, X } from "lucide-react";
 import { motion, useScroll, useTransform, useInView, useMotionValue, useSpring } from "framer-motion";
 import { useRef } from "react";
-import heroImage from "@/assets/hero-devices.jpg";
+import heroImage from "@/assets/hero-automation.png";
 import ragAgent from "@/assets/project-rag-agent.jpg";
 import callBooking from "@/assets/project-call-booking.jpg";
 import leadGen from "@/assets/project-lead-gen.jpg";
@@ -240,7 +240,7 @@ const Index = () => {
             <div className="text-center mb-20 space-y-4">
               <h2 className="text-4xl md:text-6xl font-semibold tracking-tight">What We Do</h2>
               <p className="text-xl text-muted-foreground font-light max-w-2xl mx-auto">
-                Premium solutions that blend intelligence with elegance
+                Powerful AI solutions that automate, scale, and transform your business
               </p>
             </div>
           </FadeInSection>
@@ -248,16 +248,16 @@ const Index = () => {
           <div className="grid md:grid-cols-3 gap-8">
             {[{
             icon: Sparkles,
-            title: "AI Automation Systems",
-            description: "Intelligent workflows that eliminate repetitive tasks and operate 24/7 with precision."
+            title: "AI Agents to Automate Anything",
+            description: "Build intelligent AI agents that automate any business process or workflow, operating 24/7 with precision."
           }, {
             icon: Layers,
-            title: "SaaS Prototype Development",
-            description: "From concept to functional MVP in weeks. Clean code, beautiful interfaces, scalable architecture."
+            title: "Custom RAG Assistant Development",
+            description: "Create specialized retrieval-augmented generation systems that leverage your data for intelligent responses."
           }, {
             icon: Zap,
-            title: "Premium UI/UX Engineering",
-            description: "Apple-inspired designs with meticulous attention to detail, spacing, and user experience."
+            title: "Full Stack Web Apps Creation",
+            description: "Develop complete web applications from beautiful frontend interfaces to robust backend systems."
           }].map((service, i) => <FadeInSection key={i} delay={i * 0.2}>
                 <motion.div className="magnetic-item glass-card rounded-3xl p-10 group cursor-pointer h-full relative overflow-hidden" whileHover={{
               y: -8
@@ -737,28 +737,24 @@ const Index = () => {
             <div className="text-center mb-20 space-y-4">
               <h2 className="text-4xl md:text-6xl font-semibold tracking-tight">Services</h2>
               <p className="text-xl text-muted-foreground font-light max-w-2xl mx-auto">
-                Comprehensive solutions for modern businesses
+                End-to-end AI automation and development services
               </p>
             </div>
           </FadeInSection>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-3 gap-8">
             {[{
             icon: Sparkles,
-            title: "AI Agent Creation",
-            description: "Custom intelligent agents for automation"
-          }, {
-            icon: Zap,
-            title: "Automation Consulting",
-            description: "Workflow optimization and integration"
+            title: "AI Agents to Automate Anything",
+            description: "Intelligent agents for any automation need"
           }, {
             icon: Layers,
-            title: "SaaS MVP Development",
-            description: "Rapid prototyping to production"
+            title: "Custom RAG Assistant Development",
+            description: "Specialized AI assistants with your data"
           }, {
-            icon: Rocket,
-            title: "UI Design & System Builds",
-            description: "Premium interfaces with design systems"
+            icon: Zap,
+            title: "Full Stack Web Apps",
+            description: "Complete web application development"
           }].map((service, i) => <FadeInSection key={i} delay={i * 0.15}>
                 <motion.div className="magnetic-item glass-card rounded-2xl p-8 group cursor-pointer text-center h-full" whileHover={{
               y: -8
@@ -832,8 +828,8 @@ const Index = () => {
                   hello@execute.agency
                 </a>
               </Button>
-              <Button size="lg" variant="outline" className="rounded-full px-8 py-6 text-lg font-medium border-2 border-primary-foreground/20 hover:bg-primary-foreground/10 hover-lift group" asChild>
-                <a href="https://linkedin.com/company/execute" target="_blank" rel="noopener noreferrer">
+              <Button size="lg" variant="secondary" className="rounded-full px-8 py-6 text-lg font-medium hover-lift group bg-[#0077B5] hover:bg-[#006399] text-white border-0" asChild>
+                <a href="https://www.linkedin.com/in/abhinav-automations/" target="_blank" rel="noopener noreferrer">
                   <Linkedin className="mr-2 w-5 h-5" />
                   LinkedIn
                 </a>
