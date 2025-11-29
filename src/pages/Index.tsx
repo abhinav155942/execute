@@ -3,9 +3,9 @@ import { ArrowRight, Sparkles, Zap, Layers, Clock, DollarSign, Rocket, Mail, Lin
 import { motion, useScroll, useTransform, useInView, useMotionValue, useSpring } from "framer-motion";
 import { useRef } from "react";
 import heroImage from "@/assets/hero-devices.jpg";
-import project1 from "@/assets/project-1.jpg";
-import project2 from "@/assets/project-2.jpg";
-import project3 from "@/assets/project-3.jpg";
+import ragAgent from "@/assets/project-rag-agent.jpg";
+import callBooking from "@/assets/project-call-booking.jpg";
+import leadGen from "@/assets/project-lead-gen.jpg";
 import signatureWork from "@/assets/signature-work.jpg";
 import { MagneticCursor } from "@/components/MagneticCursor";
 import { TechStack } from "@/components/TechStack";
@@ -82,7 +82,7 @@ const Index = () => {
               </motion.div>
               
               <motion.h1 
-                className="text-6xl md:text-8xl lg:text-9xl font-semibold tracking-tight leading-[0.95]"
+                className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[0.95]"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
@@ -302,7 +302,7 @@ const Index = () => {
             <div className="text-center space-y-4">
               <h2 className="text-4xl md:text-6xl font-semibold tracking-tight">Past Projects We've Executed</h2>
               <p className="text-xl text-muted-foreground font-light max-w-2xl mx-auto">
-                Drag to explore our portfolio of systems and interfaces
+                AI agents built with cutting-edge technology. All our agents come with email sending functionality by default.
               </p>
             </div>
           </FadeInSection>
@@ -317,34 +317,22 @@ const Index = () => {
         >
           {[
             {
-              image: project1,
-              title: "Enterprise SaaS Platform",
-              outcome: "Reduced manual workload by 60%",
-              tags: ["AI Automation", "Dashboard UI"]
+              image: ragAgent,
+              title: "RAG Agent",
+              outcome: "Intelligent document retrieval with context-aware responses",
+              tags: ["RAG", "Vector DB", "GPT-4", "Email Integration"]
             },
             {
-              image: project2,
-              title: "AI Agent System",
-              outcome: "Response time: 9 min → 18 sec",
-              tags: ["Machine Learning", "API Integration"]
+              image: callBooking,
+              title: "Call Booking Agent",
+              outcome: "Automated scheduling with calendar integration",
+              tags: ["Voice AI", "Calendar API", "Email Automation"]
             },
             {
-              image: project3,
-              title: "Mobile App Redesign",
-              outcome: "User retention increased 45%",
-              tags: ["UI/UX", "User Research"]
-            },
-            {
-              image: project1,
-              title: "Analytics Platform",
-              outcome: "Real-time insights at scale",
-              tags: ["Data Visualization", "Cloud Infrastructure"]
-            },
-            {
-              image: project2,
-              title: "E-commerce Automation",
-              outcome: "Order processing speed +80%",
-              tags: ["Workflow Automation", "Integration"]
+              image: leadGen,
+              title: "Lead Generation Agent",
+              outcome: "AI-powered prospect identification and outreach",
+              tags: ["Lead Gen", "CRM Integration", "Email Campaigns"]
             }
           ].map((project, i) => (
             <motion.div
@@ -465,6 +453,113 @@ const Index = () => {
           </FadeInSection>
         </div>
       </section>
+
+      {/* Differentiator / Offer Section */}
+      <FadeInSection>
+        <section className="py-32 px-6 md:px-12 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-purple-500/5" />
+          <div className="container mx-auto max-w-6xl relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-16"
+            >
+              <h2 className="text-4xl md:text-6xl font-semibold tracking-tight mb-6">What Makes Us Different</h2>
+              <p className="text-xl text-muted-foreground font-light max-w-3xl mx-auto">
+                Risk-free testing, cutting-edge AI, and flexible pricing designed for your success.
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-3 gap-8 mb-16">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="glass-card magnetic-item p-8 text-center hover-lift"
+              >
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+                  <span className="text-3xl">🚀</span>
+                </div>
+                <h3 className="text-2xl font-semibold mb-4">Unlimited 24hr Demos</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Test drive any of our AI agents for 24 hours. No commitment required. Only purchase if you love it.
+                </p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="glass-card magnetic-item p-8 text-center hover-lift"
+              >
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+                  <span className="text-3xl">🔄</span>
+                </div>
+                <h3 className="text-2xl font-semibold mb-4">Always Up-to-Date</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Get instant access to new AI models and system updates with our premium subscription. Never fall behind.
+                </p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                className="glass-card magnetic-item p-8 text-center hover-lift"
+              >
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+                  <span className="text-3xl">💎</span>
+                </div>
+                <h3 className="text-2xl font-semibold mb-4">Flexible Pricing</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Choose between our $49/month premium subscription or pay once for lifetime access. Your choice, your terms.
+                </p>
+              </motion.div>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="glass-card p-12 text-center glow-accent"
+            >
+              <h3 className="text-3xl md:text-4xl font-semibold mb-6">Ready to Experience the Difference?</h3>
+              <p className="text-xl text-muted-foreground font-light mb-8 max-w-2xl mx-auto">
+                Start your free 24-hour demo today. No credit card required.
+              </p>
+              <div className="flex flex-wrap gap-6 justify-center">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button
+                    size="lg"
+                    className="magnetic-item px-10 py-6 bg-primary text-primary-foreground rounded-full font-medium text-lg hover:shadow-elegant transition-all"
+                  >
+                    Start Free Demo
+                  </Button>
+                </motion.div>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="magnetic-item px-10 py-6 rounded-full font-medium text-lg border-2"
+                  >
+                    View Pricing
+                  </Button>
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      </FadeInSection>
 
       {/* How I Can Benefit You */}
       <section className="py-32 px-6 md:px-12 bg-grey-50">
