@@ -10,6 +10,7 @@ import signatureWork from "@/assets/signature-work.jpg";
 import { MagneticCursor } from "@/components/MagneticCursor";
 import { TechStack } from "@/components/TechStack";
 import { FloatingNav } from "@/components/FloatingNav";
+import ChatWizard from "@/components/ChatWizard";
 const FadeInSection = ({
   children,
   delay = 0
@@ -370,32 +371,15 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Signature Work Showcase */}
+      {/* Chat Wizard Section */}
       <section className="py-32 px-6 md:px-12 bg-grey-50">
         <div className="container mx-auto max-w-7xl">
           <FadeInSection>
-            <motion.div className="magnetic-item rounded-3xl overflow-hidden shadow-2xl" whileHover={{
-            scale: 1.02
-          }} transition={{
-            duration: 0.4
-          }}>
-              <motion.img src={signatureWork} alt="Signature Work" className="w-full h-auto" whileHover={{
-              scale: 1.05
-            }} transition={{
-              duration: 0.6
-            }} />
-            </motion.div>
-            <motion.p className="text-center text-muted-foreground mt-8 text-lg font-light" initial={{
-            opacity: 0
-          }} whileInView={{
-            opacity: 1
-          }} viewport={{
-            once: true
-          }} transition={{
-            delay: 0.3
-          }}>
-              Premium e-commerce platform — Full-stack development with AI-powered recommendations
-            </motion.p>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-bold mb-4">Experience AI-Powered Conversations</h2>
+              <p className="text-muted-foreground text-lg">Chat with our intelligent assistant in real-time</p>
+            </div>
+            <ChatWizard />
           </FadeInSection>
         </div>
       </section>
