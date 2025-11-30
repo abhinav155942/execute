@@ -112,6 +112,8 @@ const BookingForm = () => {
     setIsSubmitting(true);
 
     try {
+      console.log("Sending form data to webhook:", formData);
+      
       const response = await fetch("https://hook.eu2.make.com/mkjq6jct09kia72c6c7oxvy2a9ogoqre", {
         method: "POST",
         headers: {
@@ -120,14 +122,20 @@ const BookingForm = () => {
         body: JSON.stringify(formData),
       });
 
+      console.log("Webhook response status:", response.status);
+
+      if (!response.ok) {
+        throw new Error(`Webhook responded with status: ${response.status}`);
+      }
+
+      // Wait for the webhook response
       const data = await response.json();
+      console.log("Webhook response data:", data);
       
       toast({
         title: "Demo Request Submitted!",
         description: "Please check your email inbox for confirmation and next steps.",
       });
-
-      console.log("Webhook response:", data);
       
       setTimeout(() => {
         navigate("/");
