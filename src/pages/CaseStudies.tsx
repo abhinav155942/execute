@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { ProjectInterface } from "@/components/ProjectInterface";
+import { use3DTilt } from "@/hooks/use3DTilt";
 
 const CaseStudies = () => {
   const navigate = useNavigate();
@@ -83,66 +84,74 @@ const CaseStudies = () => {
           </div>
 
           <div className="space-y-16 sm:space-y-24">
-            {caseStudies.map((study, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center"
-              >
-                <div className={index % 2 === 1 ? "md:order-2" : ""}>
-                  <ProjectInterface type={study.type} className="w-full rounded-2xl" />
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {study.tags.map((tag, idx) => (
-                      <span
-                        key={idx}
-                        className="text-xs px-3 py-1 rounded-full bg-accent/10 text-accent border border-accent/20"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="space-y-4 sm:space-y-6">
-                  <div>
-                    <p className="text-accent font-medium mb-2 text-sm sm:text-base">{study.client}</p>
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight mb-4">
-                      {study.title}
-                    </h2>
-                  </div>
-
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="text-lg font-semibold mb-2">Challenge</h3>
-                      <p className="text-muted-foreground leading-relaxed">
-                        {study.challenge}
-                      </p>
+            {caseStudies.map((study, index) => {
+              const CaseStudyCard = () => {
+                const { ref, tiltStyle, handlers } = use3DTilt({ maxTilt: 8, scale: 1.02 });
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.2 }}
+                    className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center"
+                  >
+                    <div className={index % 2 === 1 ? "md:order-2" : ""}>
+                      <div ref={ref} {...handlers} style={tiltStyle}>
+                        <ProjectInterface type={study.type} className="w-full rounded-2xl" />
+                        <div className="flex flex-wrap gap-2 mt-4">
+                          {study.tags.map((tag, idx) => (
+                            <span
+                              key={idx}
+                              className="text-xs px-3 py-1 rounded-full bg-accent/10 text-accent border border-accent/20"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                     </div>
 
-                    <div>
-                      <h3 className="text-lg font-semibold mb-2">Solution</h3>
-                      <p className="text-muted-foreground leading-relaxed">
-                        {study.solution}
-                      </p>
-                    </div>
+                    <div className="space-y-4 sm:space-y-6">
+                      <div>
+                        <p className="text-accent font-medium mb-2 text-sm sm:text-base">{study.client}</p>
+                        <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight mb-4">
+                          {study.title}
+                        </h2>
+                      </div>
 
-                    <div>
-                      <h3 className="text-lg font-semibold mb-2">Results</h3>
-                      <ul className="space-y-2">
-                        {study.results.map((result, idx) => (
-                          <li key={idx} className="flex items-start gap-2">
-                            <ArrowRight className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-                            <span className="text-muted-foreground">{result}</span>
-                          </li>
-                        ))}
-                      </ul>
+                      <div className="space-y-4">
+                        <div>
+                          <h3 className="text-lg font-semibold mb-2">Challenge</h3>
+                          <p className="text-muted-foreground leading-relaxed">
+                            {study.challenge}
+                          </p>
+                        </div>
+
+                        <div>
+                          <h3 className="text-lg font-semibold mb-2">Solution</h3>
+                          <p className="text-muted-foreground leading-relaxed">
+                            {study.solution}
+                          </p>
+                        </div>
+
+                        <div>
+                          <h3 className="text-lg font-semibold mb-2">Results</h3>
+                          <ul className="space-y-2">
+                            {study.results.map((result, idx) => (
+                              <li key={idx} className="flex items-start gap-2">
+                                <ArrowRight className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
+                                <span className="text-muted-foreground">{result}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+                  </motion.div>
+                );
+              };
+              return <CaseStudyCard key={index} />;
+            })}
           </div>
 
           <div className="mt-24 text-center space-y-6">

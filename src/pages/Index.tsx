@@ -8,6 +8,7 @@ import { TechStack } from "@/components/TechStack";
 import { FloatingNav } from "@/components/FloatingNav";
 import ChatWizard from "@/components/ChatWizard";
 import { ProjectInterface } from "@/components/ProjectInterface";
+import { use3DTilt } from "@/hooks/use3DTilt";
 const FadeInSection = ({
   children,
   delay = 0
@@ -190,24 +191,30 @@ const Index = () => {
             icon: Zap,
             title: "Full Stack Web Apps Creation",
             description: "Develop complete web applications from beautiful frontend interfaces to robust backend systems."
-          }].map((service, i) => <FadeInSection key={i} delay={i * 0.2}>
-                <motion.div className="magnetic-item glass-card rounded-3xl p-10 group cursor-pointer h-full relative overflow-hidden" whileHover={{
-              y: -8
-            }} transition={{
-              duration: 0.3
-            }}>
-                  <motion.div className="absolute inset-0 bg-gradient-to-br from-accent/0 to-accent/0 group-hover:from-accent/5 group-hover:to-accent/10" transition={{
-                duration: 0.5
-              }} />
-                  <div className="relative z-10">
-                  <motion.div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
-                    <service.icon className="w-8 h-8 text-accent" />
-                  </motion.div>
-                    <h3 className="text-2xl font-semibold mb-4">{service.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed">{service.description}</p>
+          }].map((service, i) => {
+            const ServiceCard = () => {
+              const { ref, tiltStyle, handlers } = use3DTilt();
+              return (
+                <FadeInSection key={i} delay={i * 0.2}>
+                  <div ref={ref} {...handlers} style={tiltStyle}>
+                    <motion.div className="magnetic-item glass-card rounded-3xl p-10 group cursor-pointer h-full relative overflow-hidden">
+                      <motion.div className="absolute inset-0 bg-gradient-to-br from-accent/0 to-accent/0 group-hover:from-accent/5 group-hover:to-accent/10" transition={{
+                        duration: 0.5
+                      }} />
+                      <div className="relative z-10">
+                        <motion.div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
+                          <service.icon className="w-8 h-8 text-accent" />
+                        </motion.div>
+                        <h3 className="text-2xl font-semibold mb-4">{service.title}</h3>
+                        <p className="text-muted-foreground leading-relaxed">{service.description}</p>
+                      </div>
+                    </motion.div>
                   </div>
-                </motion.div>
-              </FadeInSection>)}
+                </FadeInSection>
+              );
+            };
+            return <ServiceCard key={i} />;
+          })}
           </div>
         </div>
       </section>
@@ -240,30 +247,34 @@ const Index = () => {
               title: "Lead Generation Agent",
               outcome: "AI-powered prospect identification and outreach",
               tags: ["Lead Gen", "CRM Integration"]
-            }].map((project, i) => (
-              <FadeInSection key={i} delay={i * 0.1}>
-                <motion.div 
-                  className="magnetic-item group h-full" 
-                  whileHover={{ y: -8 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className="relative rounded-2xl overflow-hidden shadow-elegant h-full bg-card border border-border">
-                    <ProjectInterface type={project.type} className="w-full" />
-                    <div className="p-4 sm:p-6 space-y-3">
-                      <h3 className="text-lg sm:text-xl font-semibold">{project.title}</h3>
-                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{project.outcome}</p>
-                      <div className="flex flex-wrap gap-2">
-                        {project.tags.map((tag, idx) => (
-                          <span key={idx} className="text-xs px-2 py-1 rounded-full bg-accent/10 text-accent border border-accent/20">
-                            {tag}
-                          </span>
-                        ))}
+            }].map((project, i) => {
+              const ProjectCard = () => {
+                const { ref, tiltStyle, handlers } = use3DTilt({ maxTilt: 10, scale: 1.03 });
+                return (
+                  <FadeInSection key={i} delay={i * 0.1}>
+                    <div ref={ref} {...handlers} style={tiltStyle} className="h-full">
+                      <div className="magnetic-item group h-full">
+                        <div className="relative rounded-2xl overflow-hidden shadow-elegant h-full bg-card border border-border">
+                          <ProjectInterface type={project.type} className="w-full" />
+                          <div className="p-4 sm:p-6 space-y-3">
+                            <h3 className="text-lg sm:text-xl font-semibold">{project.title}</h3>
+                            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{project.outcome}</p>
+                            <div className="flex flex-wrap gap-2">
+                              {project.tags.map((tag, idx) => (
+                                <span key={idx} className="text-xs px-2 py-1 rounded-full bg-accent/10 text-accent border border-accent/20">
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </motion.div>
-              </FadeInSection>
-            ))}
+                  </FadeInSection>
+                );
+              };
+              return <ProjectCard key={i} />;
+            })}
           </div>
           
           <FadeInSection>
@@ -602,22 +613,32 @@ const Index = () => {
             icon: Rocket,
             title: "Build Faster",
             description: "Turn any idea into a functional AI product or clean UI in weeks, not months."
-          }].map((benefit, i) => <FadeInSection key={i} delay={i * 0.2}>
-                <div className="relative group">
-                  <div className="glass-card rounded-3xl p-10 hover-lift cursor-pointer relative overflow-hidden h-full">
-                    {/* Glow effect on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-accent/0 via-accent/0 to-accent/0 group-hover:from-accent/5 group-hover:via-accent/10 group-hover:to-accent/5 transition-all duration-500 rounded-3xl" />
-                    
-                    <div className="relative z-10">
-                      <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
-                        <benefit.icon className="w-8 h-8 text-accent" />
+          }].map((benefit, i) => {
+            const BenefitCard = () => {
+              const { ref, tiltStyle, handlers } = use3DTilt();
+              return (
+                <FadeInSection key={i} delay={i * 0.2}>
+                  <div ref={ref} {...handlers} style={tiltStyle} className="h-full">
+                    <div className="relative group h-full">
+                      <div className="glass-card rounded-3xl p-10 cursor-pointer relative overflow-hidden h-full">
+                        {/* Glow effect on hover */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-accent/0 via-accent/0 to-accent/0 group-hover:from-accent/5 group-hover:via-accent/10 group-hover:to-accent/5 transition-all duration-500 rounded-3xl" />
+                        
+                        <div className="relative z-10">
+                          <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
+                            <benefit.icon className="w-8 h-8 text-accent" />
+                          </div>
+                          <h3 className="text-2xl font-semibold mb-4">{benefit.title}</h3>
+                          <p className="text-muted-foreground leading-relaxed">{benefit.description}</p>
+                        </div>
                       </div>
-                      <h3 className="text-2xl font-semibold mb-4">{benefit.title}</h3>
-                      <p className="text-muted-foreground leading-relaxed">{benefit.description}</p>
                     </div>
                   </div>
-                </div>
-              </FadeInSection>)}
+                </FadeInSection>
+              );
+            };
+            return <BenefitCard key={i} />;
+          })}
           </div>
           
           <FadeInSection delay={0.6}>
