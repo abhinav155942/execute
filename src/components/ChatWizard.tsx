@@ -182,18 +182,17 @@ const ChatWizard = () => {
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      <div className="bg-card rounded-lg shadow-lg overflow-hidden border border-border">
+      <div className="bg-card/95 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-border/50">
         {/* Header */}
-        <div className="bg-primary/5 border-b border-border p-4">
+        <div className="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 border-b border-border/50 p-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <MessageCircle className="w-5 h-5 text-primary" />
+            <div className="relative">
+              <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
+              <div className="absolute inset-0 w-3 h-3 rounded-full bg-green-500 animate-ping opacity-75" />
             </div>
             <div>
-              <h3 className="font-semibold text-foreground">AI Assistant</h3>
-              <p className="text-sm text-muted-foreground">
-                Ask us anything about our services
-              </p>
+              <h3 className="font-semibold text-sm">AI Assistant</h3>
+              <p className="text-xs text-muted-foreground">Always here to help</p>
             </div>
           </div>
         </div>
@@ -207,16 +206,16 @@ const ChatWizard = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.3 }}
                 className={`flex ${
                   message.role === "user" ? "justify-end" : "justify-start"
                 }`}
               >
                 <div
-                  className={`max-w-[80%] rounded-lg p-4 ${
+                  className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                     message.role === "user"
-                      ? "bg-primary text-primary-foreground ml-auto"
-                      : "bg-muted text-foreground"
+                      ? "bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-lg"
+                      : "bg-muted/50 backdrop-blur-sm border border-border/30"
                   }`}
                 >
                   <div className="text-sm leading-relaxed">
@@ -236,7 +235,7 @@ const ChatWizard = () => {
               animate={{ opacity: 1 }}
               className="flex justify-start"
             >
-              <div className="bg-muted rounded-lg p-4 flex items-center gap-2">
+              <div className="bg-muted/50 backdrop-blur-sm border border-border/30 rounded-2xl px-4 py-3 flex items-center gap-2">
                 <Loader2 className="w-4 h-4 animate-spin text-primary" />
                 <span className="text-sm text-muted-foreground">Thinking...</span>
               </div>
@@ -246,21 +245,21 @@ const ChatWizard = () => {
         </div>
 
         {/* Input Area */}
-        <div className="border-t border-border p-4 bg-card">
+        <div className="border-t border-border/50 p-4 bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5">
           <div className="flex gap-2">
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Type your message..."
-              className="flex-1"
+              placeholder="Ask me anything..."
+              className="flex-1 bg-background/50 backdrop-blur-sm border-border/50 rounded-full px-4 focus:ring-2 focus:ring-primary/20"
               disabled={isLoading}
             />
             <Button
               onClick={handleSend}
               disabled={!input.trim() || isLoading}
               size="icon"
-              className="shrink-0"
+              className="rounded-full h-10 w-10 bg-gradient-to-br from-primary to-primary/80 hover:shadow-lg transition-all shrink-0"
             >
               {isLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />

@@ -1,19 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Send, Loader2 } from "lucide-react";
+import { ArrowLeft, Send, Loader2, Linkedin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 
 const BookingForm = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -24,6 +25,29 @@ const BookingForm = () => {
     otherTool: "",
     needs: "",
   });
+
+  const carouselReviews = [
+    { name: "Liam", text: "They built my chatbot in like 3 days. Now I don't have to answer the same questions over and over." },
+    { name: "Aria", text: "I was spending 6 hours a day doing data entry. Now it takes 10 minutes. This is crazy good." },
+    { name: "Alexander", text: "My assistant can handle appointments now without me. Saves me probably 15 hours a week." },
+    { name: "Evelyn", text: "I didn't know you could automate WhatsApp like this. Game changer for my business." },
+    { name: "Elias", text: "The AI reads all my emails and tells me what's important. I actually have free time now." },
+    { name: "Luca", text: "They made a system that finds leads for me while I sleep. Best investment I ever made." }
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentReviewIndex((prev) => (prev + 1) % carouselReviews.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+  }, []);
 
   const toolOptions = [
     "WhatsApp Business",
@@ -119,6 +143,27 @@ const BookingForm = () => {
             <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
             Back to Home
           </Button>
+
+          {/* Carousel Reviews at Top */}
+          <div className="mb-8 sm:mb-12 h-32 sm:h-40 flex items-center justify-center relative overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentReviewIndex}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.6 }}
+                className="text-center px-4"
+              >
+                <p className="text-lg sm:text-xl md:text-2xl text-foreground leading-relaxed mb-3 font-light italic">
+                  "{carouselReviews[currentReviewIndex].text}"
+                </p>
+                <p className="text-sm sm:text-base font-medium text-muted-foreground">
+                  — {carouselReviews[currentReviewIndex].name}
+                </p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
           <div className="text-center mb-8 sm:mb-12">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight mb-4">
@@ -307,31 +352,48 @@ const BookingForm = () => {
             </button>
           </p>
 
-          {/* Reviews Section */}
-          <div className="mt-16 space-y-6">
-            <h3 className="text-2xl sm:text-3xl font-semibold text-center">What Our Clients Say</h3>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[
-                { name: "Michael", text: "They built my chatbot in like 3 days. Now I don't have to answer the same questions over and over." },
-                { name: "Sarah", text: "I was spending 6 hours a day doing data entry. Now it takes 10 minutes. This is crazy good." },
-                { name: "David", text: "My assistant can handle appointments now without me. Saves me probably 15 hours a week." },
-                { name: "Jessica", text: "I didn't know you could automate WhatsApp like this. Game changer for my business." },
-                { name: "Robert", text: "The AI reads all my emails and tells me what's important. I actually have free time now." },
-                { name: "Emily", text: "They made a system that finds leads for me while I sleep. Best investment I ever made." }
-              ].map((review, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: idx * 0.1 }}
-                  className="bg-card border border-border rounded-xl p-4 space-y-3"
-                >
-                  <p className="text-sm text-foreground leading-relaxed">"{review.text}"</p>
-                  <p className="text-xs font-medium text-muted-foreground">— {review.name}</p>
-                </motion.div>
-              ))}
+          {/* LinkedIn Connection Section at Bottom */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="mt-16 space-y-8"
+          >
+            <div className="text-center">
+              <h3 className="text-2xl sm:text-3xl font-semibold mb-4">Or Connect Directly</h3>
+              <p className="text-muted-foreground mb-8">
+                Prefer a quick chat? Let's connect on LinkedIn to discuss your project.
+              </p>
             </div>
-          </div>
+            
+            <div className="max-w-md mx-auto p-8 rounded-3xl bg-gradient-to-br from-primary/5 to-accent/5 border border-border shadow-elegant text-center">
+              <div className="w-20 h-20 rounded-full bg-[#0077b5] flex items-center justify-center mx-auto mb-6">
+                <Linkedin className="w-10 h-10 text-white" />
+              </div>
+              <h4 className="text-xl font-semibold mb-3">Connect on LinkedIn</h4>
+              <p className="text-muted-foreground mb-6 text-sm">
+                Send me a message to discuss your project, ask questions, or explore how we can work together.
+              </p>
+              <Button
+                size="lg"
+                asChild
+                className="rounded-full px-8 py-6 text-base bg-[#0077b5] hover:bg-[#006399] text-white"
+              >
+                <a
+                  href="https://www.linkedin.com/in/abhinav-automations/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Linkedin className="w-5 h-5 mr-2" />
+                  Message on LinkedIn
+                </a>
+              </Button>
+              <div className="mt-6 space-y-2">
+                <p className="text-xs text-muted-foreground">Available for new projects</p>
+                <p className="text-xs text-muted-foreground">Response time: Within 24 hours</p>
+              </div>
+            </div>
+          </motion.div>
         </motion.div>
       </div>
     </div>
