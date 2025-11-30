@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes border-run {
+  0%, 100% {
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
+  }
+  50% {
+    border-color: hsl(var(--accent));
+    box-shadow: 0 0 30px hsl(var(--accent) / 0.5);
+  }
+}
+
+.animate-border-run {
+  animation: border-run 3s ease-in-out infinite;
+}
+
 /* Ultra-Premium Apple-Inspired Design System
    All colors MUST be HSL. Typography: Inter.
    Focus: luxury, minimalism, cinematic feel.
