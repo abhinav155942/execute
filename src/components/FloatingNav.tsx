@@ -59,14 +59,14 @@ export const FloatingNav = () => {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -100, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed top-4 left-1/2 -translate-x-1/2 z-50"
+          className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 w-[calc(100%-2rem)] max-w-5xl"
         >
           <motion.div
-            className="glass-card px-3 sm:px-6 py-3 sm:py-4 rounded-full shadow-elegant backdrop-blur-xl border border-border/50"
+            className="glass-card px-4 sm:px-8 py-3.5 sm:py-5 rounded-full shadow-elegant backdrop-blur-xl border border-border/50 w-full"
             initial={{ scale: 0.9 }}
             animate={{ scale: 1 }}
           >
-            <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto scrollbar-hide">
+            <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto scrollbar-hide justify-center">
               {sections.map((section) => (
                 <button
                   key={section.id}
