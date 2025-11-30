@@ -690,23 +690,33 @@ const Index = () => {
           
           <div className="space-y-12">
             {[{
-            quote: "Execute transformed our manual processes into an elegant automated system. The attention to detail and clean execution exceeded expectations.",
-            author: "Sarah Chen",
-            role: "CTO, TechFlow"
+            quote: "This saved me so much time. Now I get more done in less hours.",
+            author: "Michael"
           }, {
-            quote: "Working with Execute felt like working with Apple's design team. Everything was polished, minimal, and incredibly functional.",
-            author: "Marcus Rodriguez",
-            role: "Founder, StreamAI"
+            quote: "I was doing everything by hand before. Now it just runs by itself.",
+            author: "Sarah"
+          }, {
+            quote: "My customers get answers right away now. They love it.",
+            author: "David"
+          }, {
+            quote: "I used to spend hours on this stuff. Now I barely touch it.",
+            author: "Jennifer"
+          }, {
+            quote: "It was way easier than I thought. Works great for my business.",
+            author: "Robert"
+          }, {
+            quote: "This thing pays for itself. I save like 30 hours every week now.",
+            author: "Lisa"
           }].map((testimonial, i) => <FadeInSection key={i} delay={i * 0.2}>
-                <div className="bg-white rounded-3xl p-12 shadow-soft">
-                  <p className="text-2xl font-light leading-relaxed mb-8 text-foreground">
+                <div className="bg-white rounded-3xl p-8 sm:p-12 shadow-soft">
+                  <p className="text-lg sm:text-2xl font-light leading-relaxed mb-6 sm:mb-8 text-foreground">
                     "{testimonial.quote}"
                   </p>
                   <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 rounded-full bg-grey-100" />
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-grey-100" />
                     <div>
                       <p className="font-semibold text-foreground">{testimonial.author}</p>
-                      <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground">Verified Client</p>
                     </div>
                   </div>
                 </div>
