@@ -5,7 +5,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Send, Loader2, Star } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { ArrowLeft, Send, Loader2, Star, Linkedin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
@@ -66,6 +67,29 @@ const BookingForm = () => {
     }));
   };
 
+  // Calculate progress based on filled sections
+  const calculateProgress = () => {
+    let filledSections = 0;
+    const totalSections = 3;
+
+    // Section 1: Basic Information
+    if (formData.name && formData.email && formData.companyName) {
+      filledSections += 1;
+    }
+
+    // Section 2: Current Tools
+    if (formData.currentTools.length > 0 || formData.otherCurrentTool) {
+      filledSections += 1;
+    }
+
+    // Section 3: Project Needs
+    if (formData.projectNeeds) {
+      filledSections += 1;
+    }
+
+    return (filledSections / totalSections) * 100;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -93,7 +117,7 @@ const BookingForm = () => {
       
       toast({
         title: "Demo Request Submitted!",
-        description: "We'll contact you within 24 hours to schedule your free demo.",
+        description: "Please check your email inbox for confirmation and next steps.",
       });
 
       console.log("Webhook response:", data);
@@ -129,6 +153,15 @@ const BookingForm = () => {
             <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
             Back to Home
           </Button>
+
+          {/* Progress Indicator */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-muted-foreground">Form Progress</span>
+              <span className="text-sm font-medium text-primary">{Math.round(calculateProgress())}%</span>
+            </div>
+            <Progress value={calculateProgress()} className="h-2" />
+          </div>
 
           <div className="text-center mb-8 sm:mb-12">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight mb-4">
@@ -338,6 +371,58 @@ const BookingForm = () => {
               Terms of Service
             </button>
           </p>
+
+          {/* LinkedIn Connect Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mt-16 pt-16 border-t border-border"
+          >
+            <div className="text-center space-y-8">
+              <div className="space-y-4">
+                <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight">
+                  Let's Connect
+                </h2>
+                <p className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto">
+                  Prefer to reach out directly? Connect with me on LinkedIn to discuss your project.
+                </p>
+              </div>
+
+              <div className="inline-block p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-primary/5 to-accent/5 border border-border shadow-elegant">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[#0077b5] flex items-center justify-center mx-auto mb-6">
+                  <Linkedin className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
+                </div>
+                <h3 className="text-xl sm:text-2xl font-semibold mb-4">Connect on LinkedIn</h3>
+                <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8 max-w-md mx-auto">
+                  Send me a message on LinkedIn to discuss your project, ask questions, or explore how we can work together.
+                </p>
+                <Button
+                  size="lg"
+                  asChild
+                  className="rounded-full px-8 sm:px-10 py-5 sm:py-6 text-base sm:text-lg bg-[#0077b5] hover:bg-[#006399] text-white"
+                >
+                  <a
+                    href="https://www.linkedin.com/in/abhinav-automations/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Linkedin className="w-5 h-5 mr-2" />
+                    Message on LinkedIn
+                  </a>
+                </Button>
+              </div>
+
+              <div className="space-y-3 pt-6">
+                <p className="text-sm text-muted-foreground">
+                  Available for new projects and consultations
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Response time: Within 24 hours
+                </p>
+              </div>
+            </div>
+          </motion.div>
         </motion.div>
       </div>
     </div>
