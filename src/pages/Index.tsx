@@ -681,36 +681,38 @@ const Index = () => {
 
       {/* Testimonials */}
       <section className="py-32 px-6 md:px-12 bg-grey-50">
-        <div className="container mx-auto max-w-5xl">
+        <div className="container mx-auto max-w-6xl">
           <FadeInSection>
-            <div className="text-center mb-20">
+            <div className="text-center mb-16">
               <h2 className="text-4xl md:text-6xl font-semibold tracking-tight mb-4">What Clients Say</h2>
+              <p className="text-xl text-muted-foreground">Real feedback from people who use our automation</p>
             </div>
           </FadeInSection>
           
-          <div className="space-y-12">
-            {[{
-            quote: "Execute transformed our manual processes into an elegant automated system. The attention to detail and clean execution exceeded expectations.",
-            author: "Sarah Chen",
-            role: "CTO, TechFlow"
-          }, {
-            quote: "Working with Execute felt like working with Apple's design team. Everything was polished, minimal, and incredibly functional.",
-            author: "Marcus Rodriguez",
-            role: "Founder, StreamAI"
-          }].map((testimonial, i) => <FadeInSection key={i} delay={i * 0.2}>
-                <div className="bg-white rounded-3xl p-12 shadow-soft">
-                  <p className="text-2xl font-light leading-relaxed mb-8 text-foreground">
-                    "{testimonial.quote}"
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { name: "Michael", text: "They built my chatbot in like 3 days. Now I don't have to answer the same questions over and over." },
+              { name: "Sarah", text: "I was spending 6 hours a day doing data entry. Now it takes 10 minutes. This is crazy good." },
+              { name: "David", text: "My assistant can handle appointments now without me. Saves me probably 15 hours a week." },
+              { name: "Jessica", text: "I didn't know you could automate WhatsApp like this. Game changer for my business." },
+              { name: "Robert", text: "The AI reads all my emails and tells me what's important. I actually have free time now." },
+              { name: "Emily", text: "They made a system that finds leads for me while I sleep. Best investment I ever made." }
+            ].map((testimonial, i) => (
+              <FadeInSection key={i} delay={i * 0.1}>
+                <motion.div 
+                  className="bg-card border border-border rounded-2xl p-6 space-y-4 h-full"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: i * 0.1 }}
+                  whileHover={{ y: -4 }}
+                >
+                  <p className="text-base text-foreground leading-relaxed">
+                    "{testimonial.text}"
                   </p>
-                  <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 rounded-full bg-grey-100" />
-                    <div>
-                      <p className="font-semibold text-foreground">{testimonial.author}</p>
-                      <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                    </div>
-                  </div>
-                </div>
-              </FadeInSection>)}
+                  <p className="text-sm font-medium text-muted-foreground">— {testimonial.name}</p>
+                </motion.div>
+              </FadeInSection>
+            ))}
           </div>
         </div>
       </section>

@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Send } from "lucide-react";
+import { ArrowLeft, Send, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
@@ -13,41 +13,43 @@ import { useToast } from "@/hooks/use-toast";
 const BookingForm = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     companyName: "",
     companySize: "",
     revenue: "",
-    features: [] as string[],
-    otherFeature: "",
+    currentTools: [] as string[],
+    otherTool: "",
+    needs: "",
   });
 
-  const featureOptions = [
-    "WhatsApp Business Automation",
-    "Email Automation Platform",
-    "CRM Integration",
-    "Lead Generation System",
-    "Customer Support Chatbot",
-    "Document Processing (RAG)",
-    "Voice AI Agent",
-    "Data Analytics Dashboard",
-    "Social Media Automation",
-    "Appointment Scheduling System",
-    "E-commerce Automation",
-    "Marketing Campaign Automation"
+  const toolOptions = [
+    "WhatsApp Business",
+    "Email Marketing Tools",
+    "CRM System",
+    "Manual Lead Generation",
+    "Basic Chatbots",
+    "Google Sheets/Excel",
+    "Social Media Management",
+    "Calendar Scheduling Tools",
+    "E-commerce Platform",
+    "Project Management Software",
+    "Analytics Tools",
+    "Custom In-House Tools"
   ];
 
-  const handleFeatureToggle = (feature: string) => {
+  const handleToolToggle = (tool: string) => {
     setFormData(prev => ({
       ...prev,
-      features: prev.features.includes(feature)
-        ? prev.features.filter(f => f !== feature)
-        : [...prev.features, feature]
+      currentTools: prev.currentTools.includes(tool)
+        ? prev.currentTools.filter(t => t !== tool)
+        : [...prev.currentTools, tool]
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Basic validation
@@ -60,18 +62,45 @@ const BookingForm = () => {
       return;
     }
 
-    toast({
-      title: "Demo Request Submitted!",
-      description: "We'll contact you within 24 hours to schedule your free demo.",
-    });
+    setIsSubmitting(true);
 
-    // Here you would typically send the data to your backend
-    console.log("Form submitted:", formData);
-    
-    // Reset form
-    setTimeout(() => {
-      navigate("/");
-    }, 2000);
+    try {
+      const webhookUrl = "https://hook.eu2.make.com/mkjq6jct09kia72c6c7oxvy2a9ogoqre";
+      
+      const response = await fetch(webhookUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          timestamp: new Date().toISOString(),
+          source: "booking_form"
+        }),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Demo Request Submitted!",
+          description: "We'll contact you within 24 hours to schedule your free demo.",
+        });
+        
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      } else {
+        throw new Error("Submission failed");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast({
+        title: "Submission Error",
+        description: "There was an issue submitting your request. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -184,39 +213,58 @@ const BookingForm = () => {
                 </div>
               </div>
 
-              {/* Features Selection */}
+              {/* Current Tools */}
               <div className="space-y-4 pt-4 border-t border-border">
-                <h2 className="text-xl sm:text-2xl font-semibold">What are you interested in?</h2>
-                <p className="text-sm text-muted-foreground">Select all that apply</p>
+                <h2 className="text-xl sm:text-2xl font-semibold">What tools do you currently use?</h2>
+                <p className="text-sm text-muted-foreground">Select all that apply - this helps us understand your current workflow</p>
                 
                 <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
-                  {featureOptions.map((feature) => (
-                    <div key={feature} className="flex items-start space-x-3 bg-background/50 p-3 rounded-lg hover:bg-accent/5 transition-colors">
+                  {toolOptions.map((tool) => (
+                    <div key={tool} className="flex items-start space-x-3 bg-background/50 p-3 rounded-lg hover:bg-accent/5 transition-colors">
                       <Checkbox
-                        id={feature}
-                        checked={formData.features.includes(feature)}
-                        onCheckedChange={() => handleFeatureToggle(feature)}
+                        id={tool}
+                        checked={formData.currentTools.includes(tool)}
+                        onCheckedChange={() => handleToolToggle(tool)}
                         className="mt-1"
                       />
                       <Label
-                        htmlFor={feature}
+                        htmlFor={tool}
                         className="text-sm leading-tight cursor-pointer flex-1"
                       >
-                        {feature}
+                        {tool}
                       </Label>
                     </div>
                   ))}
                 </div>
 
                 <div className="space-y-2 pt-2">
-                  <Label htmlFor="otherFeature">Other (Please specify)</Label>
+                  <Label htmlFor="otherTool">Other Tools (Please specify)</Label>
                   <Textarea
-                    id="otherFeature"
-                    placeholder="Describe any other automation needs..."
-                    value={formData.otherFeature}
-                    onChange={(e) => setFormData({ ...formData, otherFeature: e.target.value })}
-                    rows={3}
+                    id="otherTool"
+                    placeholder="List any other tools you're currently using..."
+                    value={formData.otherTool}
+                    onChange={(e) => setFormData({ ...formData, otherTool: e.target.value })}
+                    rows={2}
                     className="w-full resize-none"
+                  />
+                </div>
+              </div>
+
+              {/* What They Need */}
+              <div className="space-y-4 pt-4 border-t border-border">
+                <h2 className="text-xl sm:text-2xl font-semibold">What do you need help with?</h2>
+                <p className="text-sm text-muted-foreground">Describe your goals and challenges</p>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="needs">Your Needs *</Label>
+                  <Textarea
+                    id="needs"
+                    placeholder="Tell us what you're looking to achieve or what problems you're trying to solve..."
+                    value={formData.needs}
+                    onChange={(e) => setFormData({ ...formData, needs: e.target.value })}
+                    rows={4}
+                    className="w-full resize-none"
+                    required
                   />
                 </div>
               </div>
@@ -226,9 +274,19 @@ const BookingForm = () => {
               type="submit"
               size="lg"
               className="w-full rounded-full py-6 text-base sm:text-lg group"
+              disabled={isSubmitting}
             >
-              Submit Demo Request
-              <Send className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 w-5 h-5 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                <>
+                  Submit Demo Request
+                  <Send className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
             </Button>
           </form>
 
@@ -248,6 +306,32 @@ const BookingForm = () => {
               Terms of Service
             </button>
           </p>
+
+          {/* Reviews Section */}
+          <div className="mt-16 space-y-6">
+            <h3 className="text-2xl sm:text-3xl font-semibold text-center">What Our Clients Say</h3>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[
+                { name: "Michael", text: "They built my chatbot in like 3 days. Now I don't have to answer the same questions over and over." },
+                { name: "Sarah", text: "I was spending 6 hours a day doing data entry. Now it takes 10 minutes. This is crazy good." },
+                { name: "David", text: "My assistant can handle appointments now without me. Saves me probably 15 hours a week." },
+                { name: "Jessica", text: "I didn't know you could automate WhatsApp like this. Game changer for my business." },
+                { name: "Robert", text: "The AI reads all my emails and tells me what's important. I actually have free time now." },
+                { name: "Emily", text: "They made a system that finds leads for me while I sleep. Best investment I ever made." }
+              ].map((review, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: idx * 0.1 }}
+                  className="bg-card border border-border rounded-xl p-4 space-y-3"
+                >
+                  <p className="text-sm text-foreground leading-relaxed">"{review.text}"</p>
+                  <p className="text-xs font-medium text-muted-foreground">— {review.name}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
         </motion.div>
       </div>
     </div>
