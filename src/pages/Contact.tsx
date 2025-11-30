@@ -2,9 +2,17 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Linkedin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 
 const Contact = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground flex items-center justify-center">

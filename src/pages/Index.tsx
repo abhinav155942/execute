@@ -1,16 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, Zap, Layers, Clock, DollarSign, Rocket, Mail, Linkedin, ChevronDown, Gem, RefreshCw, Check, X } from "lucide-react";
-import { motion, useScroll, useTransform, useInView, useMotionValue, useSpring } from "framer-motion";
-import { useRef } from "react";
+import { ArrowRight, Sparkles, Zap, Layers, Clock, DollarSign, Rocket, Linkedin, Gem, RefreshCw, Check, X } from "lucide-react";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import ragAgent from "@/assets/project-rag-agent.jpg";
-import callBooking from "@/assets/project-call-booking.jpg";
-import leadGen from "@/assets/project-lead-gen.jpg";
-import signatureWork from "@/assets/signature-work.jpg";
 import { MagneticCursor } from "@/components/MagneticCursor";
 import { TechStack } from "@/components/TechStack";
 import { FloatingNav } from "@/components/FloatingNav";
 import ChatWizard from "@/components/ChatWizard";
+import { ProjectInterface } from "@/components/ProjectInterface";
 const FadeInSection = ({
   children,
   delay = 0
@@ -51,6 +48,15 @@ const Index = () => {
   });
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+
+  // Prevent auto-scrolling on page load
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+  }, []);
+
   return <div className="min-h-screen bg-background text-foreground font-inter cursor-none">
       <MagneticCursor />
       <FloatingNav />
@@ -156,15 +162,6 @@ const Index = () => {
             </motion.div>
           </motion.div>
           
-          {/* Animated Scroll Indicator */}
-          <motion.div 
-            className="absolute bottom-12 left-1/2 -translate-x-1/2 cursor-pointer" 
-            animate={{ y: [0, 12, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            onClick={() => document.getElementById('what-we-do')?.scrollIntoView({ behavior: 'smooth' })}
-          >
-            <ChevronDown className="w-8 h-8 text-muted-foreground" />
-          </motion.div>
         </motion.div>
       </section>
 
@@ -227,19 +224,19 @@ const Index = () => {
             </div>
           </FadeInSection>
           
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             {[{
-              image: ragAgent,
+              type: "rag" as const,
               title: "RAG Agent",
               outcome: "Intelligent document retrieval with context-aware responses",
               tags: ["RAG", "Vector DB", "GPT-4"]
             }, {
-              image: callBooking,
+              type: "call-booking" as const,
               title: "Call Booking Agent",
               outcome: "Automated scheduling with calendar integration",
               tags: ["Voice AI", "Calendar API"]
             }, {
-              image: leadGen,
+              type: "lead-gen" as const,
               title: "Lead Generation Agent",
               outcome: "AI-powered prospect identification and outreach",
               tags: ["Lead Gen", "CRM Integration"]
@@ -251,18 +248,10 @@ const Index = () => {
                   transition={{ duration: 0.3 }}
                 >
                   <div className="relative rounded-2xl overflow-hidden shadow-elegant h-full bg-card border border-border">
-                    <div className="aspect-[4/3] overflow-hidden">
-                      <motion.img 
-                        src={project.image} 
-                        alt={project.title} 
-                        className="w-full h-full object-cover" 
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.6 }}
-                      />
-                    </div>
-                    <div className="p-6 space-y-3">
-                      <h3 className="text-xl font-semibold">{project.title}</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">{project.outcome}</p>
+                    <ProjectInterface type={project.type} className="w-full" />
+                    <div className="p-4 sm:p-6 space-y-3">
+                      <h3 className="text-lg sm:text-xl font-semibold">{project.title}</h3>
+                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{project.outcome}</p>
                       <div className="flex flex-wrap gap-2">
                         {project.tags.map((tag, idx) => (
                           <span key={idx} className="text-xs px-2 py-1 rounded-full bg-accent/10 text-accent border border-accent/20">
@@ -434,7 +423,7 @@ const Index = () => {
                   <Button 
                     size="lg" 
                     className="magnetic-item px-10 py-6 bg-primary text-primary-foreground rounded-full font-medium text-lg hover:shadow-elegant transition-all"
-                    onClick={() => navigate('/contact')}
+                    onClick={() => navigate('/book-demo')}
                   >
                     Start Free Demo
                   </Button>
@@ -444,7 +433,7 @@ const Index = () => {
                     size="lg" 
                     variant="outline" 
                     className="magnetic-item px-10 py-6 rounded-full font-medium text-lg border-2"
-                    onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
+                    onClick={() => navigate('/contact')}
                   >
                     View Pricing
                   </Button>
@@ -500,14 +489,14 @@ const Index = () => {
                       </div>)}
                   </div>
 
-                  <Button 
-                    size="lg" 
-                    className="w-full rounded-full text-lg py-6 group-hover:shadow-elegant transition-all"
-                    onClick={() => navigate('/contact')}
-                  >
-                    Start Subscription
-                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </Button>
+                   <Button 
+                     size="lg" 
+                     className="w-full rounded-full text-lg py-6 group-hover:shadow-elegant transition-all"
+                     onClick={() => navigate('/book-demo')}
+                   >
+                     Start Subscription
+                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                   </Button>
                 </div>
               </motion.div>
             </FadeInSection>
@@ -583,9 +572,9 @@ const Index = () => {
 
           <FadeInSection delay={0.3}>
             <div className="text-center mt-12">
-              <p className="text-muted-foreground text-lg">
-                Not sure which plan? <button onClick={() => navigate('/contact')} className="text-primary font-medium hover:underline">Start a free 24hr demo</button>
-              </p>
+               <p className="text-muted-foreground text-lg">
+                 Not sure which plan? <button onClick={() => navigate('/book-demo')} className="text-primary font-medium hover:underline">Start a free 24hr demo</button>
+               </p>
             </div>
           </FadeInSection>
         </div>
