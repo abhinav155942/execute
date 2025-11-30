@@ -62,16 +62,16 @@ export const FloatingNav = () => {
           className="fixed top-4 left-1/2 -translate-x-1/2 z-50"
         >
           <motion.div
-            className="glass-card px-6 py-3 rounded-full shadow-elegant backdrop-blur-xl border border-border/50"
+            className="glass-card px-3 sm:px-6 py-3 sm:py-4 rounded-full shadow-elegant backdrop-blur-xl border border-border/50"
             initial={{ scale: 0.9 }}
             animate={{ scale: 1 }}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto scrollbar-hide">
               {sections.map((section) => (
                 <button
                   key={section.id}
                   onClick={() => scrollToSection(section.id)}
-                  className={`relative px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  className={`relative px-3 sm:px-4 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
                     activeSection === section.id
                       ? "text-primary"
                       : "text-muted-foreground hover:text-foreground"

@@ -57,17 +57,11 @@ const Contact = () => {
               </p>
               <Button
                 size="lg"
-                asChild
+                onClick={() => navigate("/book-demo")}
                 className="rounded-full px-10 py-6 text-lg bg-[#0077b5] hover:bg-[#006399] text-white"
               >
-                <a
-                  href="https://www.linkedin.com/in/abhinav-automations/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Linkedin className="w-5 h-5 mr-2" />
-                  Message on LinkedIn
-                </a>
+                <Linkedin className="w-5 h-5 mr-2" />
+                Book a Demo
               </Button>
             </div>
 

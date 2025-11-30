@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { ProjectInterface } from "@/components/ProjectInterface";
+import { use3DTilt } from "@/hooks/use3DTilt";
 
 const Work = () => {
   const navigate = useNavigate();
@@ -91,33 +92,41 @@ const Work = () => {
           <div className="mb-32">
             <h2 className="text-3xl sm:text-4xl font-semibold mb-12 text-center">Featured Projects</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-              {projects.map((project, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="group"
-                >
-                  <div className="rounded-2xl overflow-hidden shadow-elegant bg-card border border-border h-full">
-                    <ProjectInterface type={project.type} className="w-full" />
-                    <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
-                      <h3 className="text-xl sm:text-2xl font-semibold">{project.title}</h3>
-                      <p className="text-sm sm:text-base text-muted-foreground">{project.description}</p>
-                      <div className="flex flex-wrap gap-2">
-                        {project.tags.map((tag, idx) => (
-                          <span
-                            key={idx}
-                            className="text-xs px-3 py-1 rounded-full bg-accent/10 text-accent border border-accent/20"
-                          >
-                            {tag}
-                          </span>
-                        ))}
+              {projects.map((project, index) => {
+                const ProjectCard = () => {
+                  const { ref, tiltStyle, handlers } = use3DTilt({ maxTilt: 10, scale: 1.03 });
+                  return (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: index * 0.1 }}
+                      className="group"
+                    >
+                      <div ref={ref} {...handlers} style={tiltStyle} className="h-full">
+                        <div className="rounded-2xl overflow-hidden shadow-elegant bg-card border border-border h-full">
+                          <ProjectInterface type={project.type} className="w-full" />
+                          <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                            <h3 className="text-xl sm:text-2xl font-semibold">{project.title}</h3>
+                            <p className="text-sm sm:text-base text-muted-foreground">{project.description}</p>
+                            <div className="flex flex-wrap gap-2">
+                              {project.tags.map((tag, idx) => (
+                                <span
+                                  key={idx}
+                                  className="text-xs px-3 py-1 rounded-full bg-accent/10 text-accent border border-accent/20"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+                    </motion.div>
+                  );
+                };
+                return <ProjectCard key={index} />;
+              })}
             </div>
             <div className="text-center mt-12">
               <Button
