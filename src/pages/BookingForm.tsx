@@ -24,6 +24,7 @@ const BookingForm = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [currentReview, setCurrentReview] = useState(0);
   const [formData, setFormData] = useState({
     name: "",
@@ -124,22 +125,13 @@ const BookingForm = () => {
 
       console.log("Webhook response status:", response.status);
 
+      // Don't try to parse response as JSON - just check if request was successful
       if (!response.ok) {
         throw new Error(`Webhook responded with status: ${response.status}`);
       }
 
-      // Wait for the webhook response
-      const data = await response.json();
-      console.log("Webhook response data:", data);
-      
-      toast({
-        title: "Demo Request Submitted!",
-        description: "Please check your email inbox for confirmation and next steps.",
-      });
-      
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
+      // Show success page regardless of response content
+      setIsSuccess(true);
     } catch (error) {
       console.error("Error submitting form:", error);
       toast({
@@ -151,6 +143,81 @@ const BookingForm = () => {
       setIsSubmitting(false);
     }
   };
+
+  const handleBackToHome = () => {
+    setIsSuccess(false);
+    setFormData({
+      name: "",
+      email: "",
+      companyName: "",
+      companySize: "",
+      revenue: "",
+      currentTools: [],
+      otherCurrentTool: "",
+      projectNeeds: "",
+    });
+    navigate("/");
+  };
+
+  if (isSuccess) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <div className="container mx-auto max-w-2xl px-4 sm:px-6 py-8">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="text-center space-y-8"
+          >
+            <div className="w-24 h-24 rounded-full bg-green-500/10 flex items-center justify-center mx-auto">
+              <svg
+                className="w-12 h-12 text-green-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+
+            <div className="space-y-4">
+              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
+                Thank You!
+              </h1>
+              <h2 className="text-2xl sm:text-3xl font-semibold text-primary">
+                Check Your Email Inbox
+              </h2>
+              <p className="text-lg text-muted-foreground">
+                We've sent a confirmation message to
+              </p>
+              <p className="text-xl font-medium text-foreground bg-accent/10 px-6 py-3 rounded-lg inline-block">
+                {formData.email}
+              </p>
+            </div>
+
+            <div className="pt-8">
+              <p className="text-base text-muted-foreground mb-6">
+                We'll get back to you within 24 hours to discuss your project.
+              </p>
+              <Button
+                size="lg"
+                onClick={handleBackToHome}
+                className="rounded-full px-8 py-6 text-lg"
+              >
+                <ArrowLeft className="w-5 h-5 mr-2" />
+                Back to Home
+              </Button>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground">
