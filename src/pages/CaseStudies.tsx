@@ -2,16 +2,23 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import ragAgent from "@/assets/project-rag-agent.jpg";
-import callBooking from "@/assets/project-call-booking.jpg";
-import leadGen from "@/assets/project-lead-gen.jpg";
+import { useEffect } from "react";
+import { ProjectInterface } from "@/components/ProjectInterface";
 
 const CaseStudies = () => {
   const navigate = useNavigate();
 
+  // Prevent auto-scrolling on page load
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+  }, []);
+
   const caseStudies = [
     {
-      image: ragAgent,
+      type: "rag" as const,
       title: "RAG Agent for Document Analysis",
       client: "TechCorp Solutions",
       challenge: "Needed to process thousands of documents daily with context-aware responses",
@@ -24,7 +31,7 @@ const CaseStudies = () => {
       tags: ["RAG", "Vector DB", "GPT-4", "Email Integration"]
     },
     {
-      image: callBooking,
+      type: "call-booking" as const,
       title: "AI Call Booking Agent",
       client: "Healthcare Network",
       challenge: "Manual scheduling created bottlenecks and missed appointments",
@@ -37,7 +44,7 @@ const CaseStudies = () => {
       tags: ["Voice AI", "Calendar API", "Email Automation"]
     },
     {
-      image: leadGen,
+      type: "lead-gen" as const,
       title: "Lead Generation & Outreach Agent",
       client: "B2B SaaS Startup",
       challenge: "Sales team overwhelmed with lead qualification and follow-ups",
@@ -75,21 +82,17 @@ const CaseStudies = () => {
             </p>
           </div>
 
-          <div className="space-y-24">
+          <div className="space-y-16 sm:space-y-24">
             {caseStudies.map((study, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.2 }}
-                className="grid md:grid-cols-2 gap-12 items-center"
+                className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center"
               >
                 <div className={index % 2 === 1 ? "md:order-2" : ""}>
-                  <img
-                    src={study.image}
-                    alt={study.title}
-                    className="rounded-2xl shadow-elegant w-full"
-                  />
+                  <ProjectInterface type={study.type} className="w-full rounded-2xl" />
                   <div className="flex flex-wrap gap-2 mt-4">
                     {study.tags.map((tag, idx) => (
                       <span
@@ -102,10 +105,10 @@ const CaseStudies = () => {
                   </div>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   <div>
-                    <p className="text-accent font-medium mb-2">{study.client}</p>
-                    <h2 className="text-4xl font-semibold tracking-tight mb-4">
+                    <p className="text-accent font-medium mb-2 text-sm sm:text-base">{study.client}</p>
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight mb-4">
                       {study.title}
                     </h2>
                   </div>

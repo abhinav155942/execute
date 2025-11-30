@@ -2,28 +2,35 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import ragAgent from "@/assets/project-rag-agent.jpg";
-import callBooking from "@/assets/project-call-booking.jpg";
-import leadGen from "@/assets/project-lead-gen.jpg";
+import { useEffect } from "react";
+import { ProjectInterface } from "@/components/ProjectInterface";
 
 const Work = () => {
   const navigate = useNavigate();
 
+  // Prevent auto-scrolling on page load
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+  }, []);
+
   const projects = [
     {
-      image: ragAgent,
+      type: "rag" as const,
       title: "RAG Agent",
       description: "Intelligent document retrieval with context-aware responses",
       tags: ["RAG", "Vector DB", "GPT-4"]
     },
     {
-      image: callBooking,
+      type: "call-booking" as const,
       title: "Call Booking Agent",
       description: "Automated scheduling with calendar integration",
       tags: ["Voice AI", "Calendar API"]
     },
     {
-      image: leadGen,
+      type: "lead-gen" as const,
       title: "Lead Generation Agent",
       description: "AI-powered prospect identification and outreach",
       tags: ["Lead Gen", "CRM Integration"]
@@ -82,8 +89,8 @@ const Work = () => {
 
           {/* Projects Grid */}
           <div className="mb-32">
-            <h2 className="text-4xl font-semibold mb-12 text-center">Featured Projects</h2>
-            <div className="grid md:grid-cols-3 gap-8">
+            <h2 className="text-3xl sm:text-4xl font-semibold mb-12 text-center">Featured Projects</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {projects.map((project, index) => (
                 <motion.div
                   key={index}
@@ -92,17 +99,11 @@ const Work = () => {
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   className="group"
                 >
-                  <div className="rounded-2xl overflow-hidden shadow-elegant bg-card border border-border">
-                    <div className="aspect-[4/3] overflow-hidden">
-                      <img
-                        src={project.image}
-                        alt={project.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
-                    <div className="p-6 space-y-4">
-                      <h3 className="text-2xl font-semibold">{project.title}</h3>
-                      <p className="text-muted-foreground">{project.description}</p>
+                  <div className="rounded-2xl overflow-hidden shadow-elegant bg-card border border-border h-full">
+                    <ProjectInterface type={project.type} className="w-full" />
+                    <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                      <h3 className="text-xl sm:text-2xl font-semibold">{project.title}</h3>
+                      <p className="text-sm sm:text-base text-muted-foreground">{project.description}</p>
                       <div className="flex flex-wrap gap-2">
                         {project.tags.map((tag, idx) => (
                           <span
@@ -133,8 +134,8 @@ const Work = () => {
 
           {/* Client Testimonials */}
           <div className="mb-24">
-            <h2 className="text-4xl font-semibold mb-12 text-center">Client Testimonials</h2>
-            <div className="grid md:grid-cols-3 gap-8">
+            <h2 className="text-3xl sm:text-4xl font-semibold mb-12 text-center">Client Testimonials</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {testimonials.map((testimonial, index) => (
                 <motion.div
                   key={index}
