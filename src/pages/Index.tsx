@@ -191,19 +191,20 @@ const Index = () => {
             title: "Full Stack Web Apps Creation",
             description: "Develop complete web applications from beautiful frontend interfaces to robust backend systems."
           }].map((service, i) => <FadeInSection key={i} delay={i * 0.2}>
-                <motion.div className="group relative overflow-hidden rounded-3xl p-8 bg-gradient-to-br from-primary/5 via-accent/5 to-transparent border border-border hover:border-primary/30 transition-all duration-500 h-full" whileHover={{
+                <motion.div className="magnetic-item glass-card rounded-3xl p-10 group cursor-pointer h-full relative overflow-hidden" whileHover={{
               y: -8
             }} transition={{
               duration: 0.3
             }}>
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/0 via-primary/5 to-accent/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <motion.div className="absolute inset-0 bg-gradient-to-br from-accent/0 to-accent/0 group-hover:from-accent/5 group-hover:to-accent/10" transition={{
+                duration: 0.5
+              }} />
                   <div className="relative z-10">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                      <service.icon className="w-8 h-8 text-primary" />
-                    </div>
-                    <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors">{service.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{service.description}</p>
-                    <div className="mt-6 h-1 w-0 group-hover:w-full bg-gradient-to-r from-primary to-accent transition-all duration-500 rounded-full" />
+                  <motion.div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
+                    <service.icon className="w-8 h-8 text-accent" />
+                  </motion.div>
+                    <h3 className="text-2xl font-semibold mb-4">{service.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed">{service.description}</p>
                   </div>
                 </motion.div>
               </FadeInSection>)}
@@ -295,26 +296,9 @@ const Index = () => {
       </section>
 
       {/* Tech Stack Section */}
-      <section id="tech-stack" className="py-32 px-6 md:px-12 bg-grey-50">
-        <div className="container mx-auto max-w-7xl">
-          <FadeInSection>
-            <div className="text-center mb-20 space-y-4">
-              <h2 className="text-4xl md:text-6xl font-semibold tracking-tight">Our Tech Stack</h2>
-              <p className="text-xl text-muted-foreground font-light max-w-2xl mx-auto">
-                Cutting-edge technologies powering your automation
-              </p>
-            </div>
-          </FadeInSection>
-          <FadeInSection>
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 rounded-3xl blur-3xl opacity-50" />
-              <div className="relative bg-card/50 backdrop-blur-sm border border-border rounded-3xl p-8 sm:p-12">
-                <TechStack />
-              </div>
-            </div>
-          </FadeInSection>
-        </div>
-      </section>
+      <div id="tech-stack">
+        <TechStack />
+      </div>
 
       {/* About Section */}
       <section className="py-32 px-6 md:px-12">
@@ -475,7 +459,7 @@ const Index = () => {
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {/* Premium Subscription */}
             <FadeInSection delay={0.1}>
-              <motion.div className="glass-card magnetic-item rounded-3xl p-10 relative overflow-hidden group animate-border-run" whileHover={{
+              <motion.div className="glass-card magnetic-item rounded-3xl p-10 relative overflow-hidden group" whileHover={{
               y: -8,
               scale: 1.02
             }} transition={{
@@ -697,38 +681,36 @@ const Index = () => {
 
       {/* Testimonials */}
       <section className="py-32 px-6 md:px-12 bg-grey-50">
-        <div className="container mx-auto max-w-6xl">
+        <div className="container mx-auto max-w-5xl">
           <FadeInSection>
-            <div className="text-center mb-16">
+            <div className="text-center mb-20">
               <h2 className="text-4xl md:text-6xl font-semibold tracking-tight mb-4">What Clients Say</h2>
-              <p className="text-xl text-muted-foreground">Real feedback from people who use our automation</p>
             </div>
           </FadeInSection>
           
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { name: "Liam", text: "They built my chatbot in like 3 days. Now I don't have to answer the same questions over and over." },
-              { name: "Aria", text: "I was spending 6 hours a day doing data entry. Now it takes 10 minutes. This is crazy good." },
-              { name: "Alexander", text: "My assistant can handle appointments now without me. Saves me probably 15 hours a week." },
-              { name: "Evelyn", text: "I didn't know you could automate WhatsApp like this. Game changer for my business." },
-              { name: "Elias", text: "The AI reads all my emails and tells me what's important. I actually have free time now." },
-              { name: "Luca", text: "They made a system that finds leads for me while I sleep. Best investment I ever made." }
-            ].map((testimonial, i) => (
-              <FadeInSection key={i} delay={i * 0.1}>
-                <motion.div 
-                  className="bg-card border border-border rounded-2xl p-6 space-y-4 h-full"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: i * 0.1 }}
-                  whileHover={{ y: -4 }}
-                >
-                  <p className="text-base text-foreground leading-relaxed">
-                    "{testimonial.text}"
+          <div className="space-y-12">
+            {[{
+            quote: "Execute transformed our manual processes into an elegant automated system. The attention to detail and clean execution exceeded expectations.",
+            author: "Sarah Chen",
+            role: "CTO, TechFlow"
+          }, {
+            quote: "Working with Execute felt like working with Apple's design team. Everything was polished, minimal, and incredibly functional.",
+            author: "Marcus Rodriguez",
+            role: "Founder, StreamAI"
+          }].map((testimonial, i) => <FadeInSection key={i} delay={i * 0.2}>
+                <div className="bg-white rounded-3xl p-12 shadow-soft">
+                  <p className="text-2xl font-light leading-relaxed mb-8 text-foreground">
+                    "{testimonial.quote}"
                   </p>
-                  <p className="text-sm font-medium text-muted-foreground">— {testimonial.name}</p>
-                </motion.div>
-              </FadeInSection>
-            ))}
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-full bg-grey-100" />
+                    <div>
+                      <p className="font-semibold text-foreground">{testimonial.author}</p>
+                      <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                    </div>
+                  </div>
+                </div>
+              </FadeInSection>)}
           </div>
         </div>
       </section>

@@ -3,7 +3,6 @@ import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 export const MagneticCursor = () => {
   const [isHovering, setIsHovering] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
 
@@ -12,17 +11,6 @@ export const MagneticCursor = () => {
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   useEffect(() => {
-    // Check if device is mobile
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-
-    if (isMobile) {
-      return;
-    }
     const moveCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
@@ -60,14 +48,8 @@ export const MagneticCursor = () => {
       window.removeEventListener('mousemove', moveCursor);
       document.removeEventListener('mouseenter', handleMouseEnter, true);
       document.removeEventListener('mouseleave', handleMouseLeave, true);
-      window.removeEventListener('resize', checkMobile);
     };
-  }, [cursorX, cursorY, isMobile]);
-
-  // Don't render on mobile
-  if (isMobile) {
-    return null;
-  }
+  }, [cursorX, cursorY]);
 
   return (
     <motion.div
