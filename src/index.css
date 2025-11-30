@@ -122,14 +122,29 @@
   }
 }
 
-/* Smooth Scrolling */
+/* Smooth Scrolling with Enhanced Easing */
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 100px; /* Account for floating nav */
+  }
+  
+  /* Override smooth scroll with custom easing for modern browsers */
+  @supports (scroll-behavior: smooth) {
+    html {
+      scroll-behavior: auto;
+    }
   }
   
   * {
     @apply border-border;
+  }
+}
+
+/* Custom Smooth Scroll Animation */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
   }
 }
 
@@ -166,7 +181,7 @@
   }
   
   .slide-up {
-    animation: slideUp 0.8s ease-out forwards;
+    animation: slideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
   
   .cursor-none {
@@ -175,6 +190,11 @@
   
   .cursor-none * {
     cursor: none !important;
+  }
+
+  /* Smooth scroll enhancements */
+  .smooth-scroll-section {
+    will-change: transform, opacity;
   }
 }
 

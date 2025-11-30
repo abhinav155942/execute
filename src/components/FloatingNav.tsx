@@ -44,10 +44,18 @@ export const FloatingNav = () => {
   }, []);
 
   const scrollToSection = (id: string) => {
-    if (id === "hero") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } else {
-      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    const element = id === "hero" 
+      ? document.querySelector("section") 
+      : document.getElementById(id);
+    
+    if (element) {
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = id === "hero" ? 0 : elementPosition - 100;
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
     }
   };
 
@@ -59,10 +67,10 @@ export const FloatingNav = () => {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -100, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 w-[calc(100%-2rem)] max-w-5xl"
+          className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] px-4 w-auto"
         >
           <motion.div
-            className="glass-card px-4 sm:px-8 py-3.5 sm:py-5 rounded-full shadow-elegant backdrop-blur-xl border border-border/50 w-full"
+            className="glass-card px-6 sm:px-8 py-4 sm:py-5 rounded-full shadow-elegant backdrop-blur-xl border-2 border-border/50 w-auto min-w-fit"
             initial={{ scale: 0.9 }}
             animate={{ scale: 1 }}
           >
